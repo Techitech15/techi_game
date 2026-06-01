@@ -11,7 +11,7 @@ cd docs
 python -m http.server 8061 --bind 127.0.0.1
 ```
 
-Controls: WASD or arrow keys.
+Controls: tap/click to move, or use WASD / arrow keys.
 
 ## GitHub Pages
 
