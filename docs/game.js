@@ -2,11 +2,26 @@ const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
 const statusEl = document.querySelector("#status");
 
+const itemTypes = {
+  amber: { name: "Amber", kind: "treasure", color: "#f0ad36" },
+  bell: { name: "Tiny bell", kind: "treasure", color: "#f5d76c" },
+  ribbon: { name: "Ribbon", kind: "treasure", color: "#f27a9b" },
+  bottlecap: { name: "Bottle cap", kind: "trash", color: "#92a2b8" },
+  wrapper: { name: "Wrapper", kind: "trash", color: "#9ed17a" },
+  twig: { name: "Weird twig", kind: "trash", color: "#9a6a3c" },
+};
+
 const keys = new Set();
 const state = {
   ready: false,
   cat: { x: 512, y: 405, speed: 125, facing: 1, frame: 0, frameTime: 0 },
   destination: null,
+  pendingDigSpot: null,
+  digSpots: [],
+  collection: {},
+  notice: "",
+  noticeTimer: 0,
+  digTimer: 0,
   props: [],
   collision: null,
   hooks: null,
@@ -46,9 +61,36 @@ async function boot() {
   );
   state.images.set("cat", await loadImage("assets/cat/munchkin-walk-sheet.png"));
   state.props = props.placements;
+  initDigSpots();
   state.ready = true;
-  statusEl.textContent = "Tap/click to move, or use WASD / arrow keys";
+  updateHud();
   requestAnimationFrame(tick);
+}
+
+function initDigSpots() {
+  state.collection = Object.fromEntries(Object.keys(itemTypes).map((id) => [id, 0]));
+  state.digSpots = [
+    { id: "buried_amber", x: 430, y: 318, item: "amber", found: false },
+    { id: "buried_bell", x: 592, y: 502, item: "bell", found: false },
+    { id: "buried_ribbon", x: 226, y: 450, item: "ribbon", found: false },
+    { id: "buried_bottlecap", x: 705, y: 310, item: "bottlecap", found: false },
+    { id: "buried_wrapper", x: 332, y: 640, item: "wrapper", found: false },
+    { id: "buried_twig", x: 824, y: 528, item: "twig", found: false },
+  ];
+}
+
+function updateHud() {
+  const found = state.digSpots.filter((spot) => spot.found).length;
+  const total = state.digSpots.length;
+  const treasure = Object.entries(state.collection)
+    .filter(([id, count]) => count > 0 && itemTypes[id].kind === "treasure")
+    .map(([id, count]) => `${itemTypes[id].name} x${count}`)
+    .join(" / ");
+  const trash = Object.entries(state.collection)
+    .filter(([id, count]) => count > 0 && itemTypes[id].kind === "trash")
+    .map(([id, count]) => `${itemTypes[id].name} x${count}`)
+    .join(" / ");
+  statusEl.textContent = `Collection ${found}/${total}${treasure ? ` | Treasure: ${treasure}` : ""}${trash ? ` | Trash: ${trash}` : ""}`;
 }
 
 function pointInPolygon(point, polygon) {
@@ -112,10 +154,60 @@ function setDestinationFromClientPoint(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
   const x = ((clientX - rect.left) / rect.width) * canvas.width;
   const y = ((clientY - rect.top) / rect.height) * canvas.height;
+  const spot = nearestDigSpot(x, y, 44);
+  if (spot) {
+    state.pendingDigSpot = spot;
+    state.destination = nearestWalkablePoint(spot.x, spot.y + 18);
+    setNotice("...");
+    return;
+  }
   state.destination = nearestWalkablePoint(x, y);
+  state.pendingDigSpot = null;
+}
+
+function nearestDigSpot(x, y, range) {
+  let nearest = null;
+  for (const spot of state.digSpots) {
+    if (spot.found) continue;
+    const distance = Math.hypot(spot.x - x, spot.y - y);
+    if (distance <= range && (!nearest || distance < nearest.distance)) {
+      nearest = { ...spot, distance };
+    }
+  }
+  return nearest ? state.digSpots.find((spot) => spot.id === nearest.id) : null;
+}
+
+function setNotice(text) {
+  state.notice = text;
+  state.noticeTimer = 1.8;
+}
+
+function tryDig() {
+  const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 58);
+  if (!spot) {
+    setNotice("Nothing here");
+    return false;
+  }
+  digSpot(spot);
+  return true;
+}
+
+function digSpot(spot) {
+  if (!spot || spot.found) return;
+  spot.found = true;
+  state.pendingDigSpot = null;
+  state.destination = null;
+  state.digTimer = 0.45;
+  state.collection[spot.item] += 1;
+  const item = itemTypes[spot.item];
+  setNotice(`${item.kind === "trash" ? "Found" : "Treasure"}: ${item.name}`);
+  updateHud();
 }
 
 function update(dt) {
+  state.noticeTimer = Math.max(0, state.noticeTimer - dt);
+  state.digTimer = Math.max(0, state.digTimer - dt);
+
   let dx = 0;
   let dy = 0;
   if (keys.has("arrowleft") || keys.has("a")) dx -= 1;
@@ -132,6 +224,9 @@ function update(dt) {
       state.destination = null;
       dx = 0;
       dy = 0;
+      if (state.pendingDigSpot && Math.hypot(state.pendingDigSpot.x - state.cat.x, state.pendingDigSpot.y - state.cat.y) < 70) {
+        digSpot(state.pendingDigSpot);
+      }
     }
   }
 
@@ -180,11 +275,86 @@ function drawCat() {
   if (state.cat.facing < 0) {
     ctx.translate(state.cat.x, 0);
     ctx.scale(-1, 1);
-    ctx.drawImage(image, sx, sy, frameSize, frameSize, -width / 2, state.cat.y - height, width, height);
+    ctx.drawImage(image, sx, sy, frameSize, frameSize, -width / 2, state.cat.y - height + digBob(), width, height);
   } else {
-    ctx.drawImage(image, sx, sy, frameSize, frameSize, state.cat.x - width / 2, state.cat.y - height, width, height);
+    ctx.drawImage(image, sx, sy, frameSize, frameSize, state.cat.x - width / 2, state.cat.y - height + digBob(), width, height);
   }
   ctx.restore();
+}
+
+function digBob() {
+  if (state.digTimer <= 0) return 0;
+  return Math.sin(state.digTimer * 48) * 3;
+}
+
+function drawDigSpot(spot) {
+  ctx.save();
+  ctx.globalAlpha = spot.found ? 0.45 : 1;
+  ctx.translate(spot.x, spot.y);
+
+  if (spot.found) {
+    const item = itemTypes[spot.item];
+    ctx.fillStyle = item.color;
+    ctx.strokeStyle = "rgba(40, 25, 12, 0.45)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(0, -10, 12, 9, -0.25, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "rgba(83, 55, 25, 0.7)";
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 22, 9, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "rgba(158, 118, 58, 0.72)";
+  ctx.beginPath();
+  ctx.ellipse(-5, -3, 13, 5, -0.15, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (!spot.found) {
+    ctx.strokeStyle = "rgba(255, 243, 170, 0.78)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-4, -16);
+    ctx.lineTo(-1, -9);
+    ctx.moveTo(4, -16);
+    ctx.lineTo(1, -9);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawNotice() {
+  if (!state.notice || state.noticeTimer <= 0) return;
+  ctx.save();
+  ctx.font = "600 18px system-ui, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const x = canvas.width / 2;
+  const y = 56;
+  const metrics = ctx.measureText(state.notice);
+  const width = Math.min(canvas.width - 40, metrics.width + 34);
+  ctx.fillStyle = "rgba(25, 34, 20, 0.72)";
+  roundRect(x - width / 2, y - 20, width, 40, 8);
+  ctx.fill();
+  ctx.fillStyle = "#fff7d8";
+  ctx.fillText(state.notice, x, y);
+  ctx.restore();
+}
+
+function roundRect(x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
 }
 
 function render() {
@@ -192,11 +362,13 @@ function render() {
   ctx.drawImage(state.images.get("base"), 0, 0, canvas.width, canvas.height);
 
   const renderables = [
+    ...state.digSpots.map((spot) => ({ y: spot.y - 2, draw: () => drawDigSpot(spot) })),
     ...state.props.map((prop) => ({ y: prop.y, draw: () => drawProp(prop) })),
     { y: state.cat.y, draw: drawCat },
   ].sort((a, b) => a.y - b.y);
 
   for (const item of renderables) item.draw();
+  drawNotice();
 }
 
 let last = 0;
@@ -211,6 +383,10 @@ function tick(now) {
 
 addEventListener("keydown", (event) => {
   keys.add(event.key.toLowerCase());
+  if (event.key === " ") {
+    event.preventDefault();
+    tryDig();
+  }
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) {
     event.preventDefault();
   }
