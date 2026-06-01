@@ -1,0 +1,125 @@
+{
+  "map": "forest-cat",
+  "size": {
+    "width": 1024,
+    "height": 768
+  },
+  "actor_radius": 18,
+  "walkmesh": {
+    "type": "polygon",
+    "points": [
+      [
+        118,
+        105
+      ],
+      [
+        895,
+        105
+      ],
+      [
+        940,
+        235
+      ],
+      [
+        885,
+        676
+      ],
+      [
+        160,
+        684
+      ],
+      [
+        86,
+        550
+      ],
+      [
+        84,
+        238
+      ]
+    ]
+  },
+  "blockers": [
+    {
+      "id": "tree_nw_01",
+      "type": "circle",
+      "cx": 120,
+      "cy": 130,
+      "r": 36
+    },
+    {
+      "id": "tree_ne_01",
+      "type": "circle",
+      "cx": 824,
+      "cy": 132,
+      "r": 36
+    },
+    {
+      "id": "tree_sw_01",
+      "type": "circle",
+      "cx": 150,
+      "cy": 620,
+      "r": 38
+    },
+    {
+      "id": "tree_se_01",
+      "type": "circle",
+      "cx": 850,
+      "cy": 604,
+      "r": 38
+    },
+    {
+      "id": "tree_n_02",
+      "type": "circle",
+      "cx": 454,
+      "cy": 84,
+      "r": 32
+    },
+    {
+      "id": "tree_s_02",
+      "type": "circle",
+      "cx": 520,
+      "cy": 690,
+      "r": 34
+    },
+    {
+      "id": "bush_w_01",
+      "type": "ellipse",
+      "cx": 270,
+      "cy": 280,
+      "rx": 38,
+      "ry": 22
+    },
+    {
+      "id": "bush_e_01",
+      "type": "ellipse",
+      "cx": 744,
+      "cy": 408,
+      "rx": 38,
+      "ry": 22
+    },
+    {
+      "id": "rock_n_01",
+      "type": "ellipse",
+      "cx": 652,
+      "cy": 230,
+      "rx": 30,
+      "ry": 20
+    },
+    {
+      "id": "rock_s_01",
+      "type": "ellipse",
+      "cx": 384,
+      "cy": 575,
+      "rx": 30,
+      "ry": 20
+    },
+    {
+      "id": "stump_01",
+      "type": "ellipse",
+      "cx": 678,
+      "cy": 610,
+      "rx": 30,
+      "ry": 22
+    }
+  ]
+}

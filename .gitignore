@@ -1,0 +1,10 @@
+# Local/generated working assets
+*.zip
+cream-tabby-munchkin-action-bundle*/
+cream-tabby-munchkin-walk*/
+forest-cat-map/
+tools/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

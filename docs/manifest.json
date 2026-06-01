@@ -1,0 +1,16 @@
+{
+  "name": "forest-cat",
+  "map_mode": "scene_mode",
+  "visual_model": "layered_raster",
+  "runtime_object_model": "y_sorted_props",
+  "collision_model": "polygon_walkmesh + object blockers",
+  "engine_target": "raw_canvas / project-native JSON",
+  "cat_sprite_source": "assets/cat/munchkin-walk-sheet.png",
+  "files": {
+    "base": "assets/map/forest-cat-base.png",
+    "preview": "assets/map/forest-cat-layered-preview.png",
+    "props": "data/forest-cat-props.json",
+    "collision": "data/forest-cat-collision.json",
+    "scene_hooks": "data/forest-cat-scene-hooks.json"
+  }
+}
