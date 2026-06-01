@@ -4,6 +4,7 @@ cream-tabby-munchkin-action-bundle*/
 cream-tabby-munchkin-walk*/
 forest-cat-map/
 tools/
+docs/assets/ui/*-source.png
 
 # OS/editor noise
 .DS_Store

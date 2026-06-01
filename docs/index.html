@@ -390,6 +390,152 @@
         font-size: 29px;
       }
 
+      .title-splash {
+        position: absolute;
+        inset: 0;
+        z-index: 8;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 45%, rgba(23, 49, 16, 0.42), rgba(8, 22, 7, 0.74));
+        animation: titleSplashFade 3.1s ease forwards;
+      }
+
+      .title-splash img {
+        width: min(82%, 760px);
+        filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.42));
+        animation: titleLogoPop 3.1s ease forwards;
+      }
+
+      @keyframes titleSplashFade {
+        0%,
+        58% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+
+      @keyframes titleLogoPop {
+        0% {
+          transform: translateY(14px) scale(0.92);
+        }
+
+        14%,
+        58% {
+          transform: translateY(0) scale(1);
+        }
+
+        100% {
+          transform: translateY(-10px) scale(0.96);
+        }
+      }
+
+      .bag-modal {
+        position: absolute;
+        inset: 0;
+        z-index: 7;
+        display: none;
+        place-items: center;
+        padding: 18px;
+        background: rgba(12, 21, 8, 0.58);
+      }
+
+      .bag-modal.is-open {
+        display: grid;
+      }
+
+      .bag-card {
+        position: relative;
+        width: min(82%, 430px);
+        aspect-ratio: 2 / 3;
+        pointer-events: auto;
+      }
+
+      .bag-card-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.38));
+      }
+
+      .bag-close {
+        position: absolute;
+        right: 7%;
+        top: 4.4%;
+        width: 13%;
+        aspect-ratio: 1;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: transparent;
+        cursor: pointer;
+      }
+
+      .bag-items {
+        position: absolute;
+        left: 13.5%;
+        right: 13.5%;
+        top: 25%;
+        bottom: 12%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-content: start;
+        gap: 10px;
+        overflow: auto;
+        padding: 4px;
+      }
+
+      .bag-item {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        align-items: center;
+        gap: 8px;
+        min-height: 50px;
+        padding: 6px;
+        border-radius: 10px;
+        background: rgba(255, 236, 177, 0.74);
+        border: 2px solid rgba(136, 82, 25, 0.4);
+        color: #5c2b0c;
+        text-shadow: 0 1px 0 rgba(255, 246, 207, 0.9);
+      }
+
+      .bag-item-icon {
+        width: 40px;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        background-image: url("assets/items/collectibles-sheet.png");
+        background-repeat: no-repeat;
+        background-size: 300% 200%;
+      }
+
+      .bag-item-name {
+        font-size: 13px;
+        line-height: 1.2;
+      }
+
+      .bag-item-count {
+        font-size: 16px;
+        color: #2e7a1e;
+      }
+
+      .bag-empty {
+        grid-column: 1 / -1;
+        align-self: center;
+        justify-self: center;
+        margin-top: 34%;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255, 236, 177, 0.82);
+        color: #6a3510;
+        font-weight: 900;
+      }
+
       @media (max-width: 760px) {
         body {
           padding: 0;
@@ -514,6 +660,41 @@
           width: 29px;
           height: 29px;
           font-size: 19px;
+        }
+
+        .title-splash img {
+          width: 88%;
+        }
+
+        .bag-modal {
+          padding: 8px;
+        }
+
+        .bag-card {
+          width: min(90%, 360px);
+        }
+
+        .bag-items {
+          gap: 6px;
+        }
+
+        .bag-item {
+          grid-template-columns: 32px 1fr;
+          min-height: 40px;
+          gap: 6px;
+          padding: 5px;
+        }
+
+        .bag-item-icon {
+          width: 32px;
+        }
+
+        .bag-item-name {
+          font-size: 11px;
+        }
+
+        .bag-item-count {
+          font-size: 13px;
         }
       }
 
@@ -723,6 +904,9 @@
   <body>
     <main class="frame">
       <canvas id="game" width="1024" height="768"></canvas>
+      <div class="title-splash" id="title-splash" aria-hidden="true">
+        <img src="assets/ui/title-logo.png" alt="" />
+      </div>
       <div class="hud" aria-hidden="false">
         <div class="hud-title wood">テチの穴掘り</div>
         <div class="top-progress" aria-label="レベル">
@@ -766,12 +950,19 @@
         </div>
         <button class="dig-button" id="dig-button" type="button">🐾 掘る 🐾</button>
         <div class="side-actions">
-          <button class="small-action" type="button" aria-label="バッグ"><span class="small-icon">🎒</span><span>バッグ</span></button>
+          <button class="small-action" id="bag-button" type="button" aria-label="バッグ"><span class="small-icon">🎒</span><span>バッグ</span></button>
           <button class="small-action" type="button" aria-label="マップ"><span class="small-icon">🗺</span><span>マップ</span></button>
+        </div>
+      </div>
+      <div class="bag-modal" id="bag-modal" aria-hidden="true">
+        <div class="bag-card" role="dialog" aria-modal="true" aria-label="バッグ">
+          <img class="bag-card-bg" src="assets/ui/bag-panel.png" alt="" />
+          <button class="bag-close" id="bag-close" type="button" aria-label="閉じる">閉じる</button>
+          <div class="bag-items" id="bag-items"></div>
         </div>
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=16"></script>
+    <script src="game.js?v=17"></script>
   </body>
 </html>

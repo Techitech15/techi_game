@@ -13,6 +13,10 @@ const hudElements = {
   xpCount: document.querySelector("#xp-count"),
   xpFill: document.querySelector("#xp-fill"),
   digButton: document.querySelector("#dig-button"),
+  bagButton: document.querySelector("#bag-button"),
+  bagModal: document.querySelector("#bag-modal"),
+  bagClose: document.querySelector("#bag-close"),
+  bagItems: document.querySelector("#bag-items"),
   missionPanel: document.querySelector(".mission-panel"),
   missionTitle: document.querySelector(".mission-title"),
 };
@@ -149,6 +153,32 @@ function updateHud() {
   hudElements.toolBell.textContent = state.collection.bell || 0;
   hudElements.xpCount.textContent = `${found}/${total}`;
   hudElements.xpFill.style.width = `${Math.min(100, (found / total) * 100)}%`;
+  renderBagItems();
+}
+
+function renderBagItems() {
+  const collected = Object.entries(state.collection).filter(([, count]) => count > 0);
+  if (collected.length === 0) {
+    hudElements.bagItems.innerHTML = `<div class="bag-empty">まだ何も見つけていません</div>`;
+    return;
+  }
+
+  hudElements.bagItems.innerHTML = collected
+    .map(([id, count]) => {
+      const item = itemTypes[id];
+      const x = (item.sprite % 3) * 50;
+      const y = Math.floor(item.sprite / 3) * 100;
+      return `
+        <div class="bag-item">
+          <span class="bag-item-icon" style="background-position: ${x}% ${y}%"></span>
+          <span>
+            <span class="bag-item-name">${item.name}</span>
+            <span class="bag-item-count">x${count}</span>
+          </span>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 function pointInPolygon(point, polygon) {
@@ -786,6 +816,37 @@ hudElements.missionTitle.addEventListener("keydown", (event) => {
   if (!compactMissionQuery.matches || !["Enter", " "].includes(event.key)) return;
   event.preventDefault();
   setMissionCollapsed(!hudElements.missionPanel.classList.contains("is-mission-collapsed"));
+});
+
+function setBagOpen(open) {
+  hudElements.bagModal.classList.toggle("is-open", open);
+  hudElements.bagModal.setAttribute("aria-hidden", String(!open));
+  if (open) renderBagItems();
+}
+
+hudElements.bagButton.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  unlockAudio();
+  setBagOpen(true);
+});
+
+hudElements.bagClose.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  setBagOpen(false);
+});
+
+hudElements.bagModal.addEventListener("pointerdown", (event) => {
+  if (event.target !== hudElements.bagModal) return;
+  event.preventDefault();
+  setBagOpen(false);
+});
+
+addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    setBagOpen(false);
+  }
 });
 
 hudElements.digButton.addEventListener("pointerdown", (event) => {
