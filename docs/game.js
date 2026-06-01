@@ -13,6 +13,7 @@ const itemTypes = {
 const buriedItemIds = Object.keys(itemTypes);
 const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
+const TREE_FADE_ALPHA = 0.42;
 
 const keys = new Set();
 const state = {
@@ -558,7 +559,33 @@ function drawProp(item) {
   if (!image) return;
   const width = item.w;
   const height = (image.height / image.width) * width;
+  ctx.save();
+  if (treeCoversCat(item, width, height)) {
+    ctx.globalAlpha = TREE_FADE_ALPHA;
+  }
   ctx.drawImage(image, item.x - width / 2, item.y - height, width, height);
+  ctx.restore();
+}
+
+function treeCoversCat(item, width, height) {
+  if (item.prop !== "broadleaf_tree" || item.y <= state.cat.y - 4) return false;
+  const propBox = {
+    left: item.x - width / 2 + width * 0.12,
+    right: item.x + width / 2 - width * 0.12,
+    top: item.y - height + height * 0.1,
+    bottom: item.y + 8,
+  };
+  const catBox = {
+    left: state.cat.x - 30,
+    right: state.cat.x + 30,
+    top: state.cat.y - 72,
+    bottom: state.cat.y - 4,
+  };
+  return rectsOverlap(propBox, catBox);
+}
+
+function rectsOverlap(a, b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
 function drawCat() {
