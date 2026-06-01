@@ -14,6 +14,7 @@ python -m http.server 8061 --bind 127.0.0.1
 Controls: tap/click to move, tap suspicious dirt to dig, or use WASD / arrow keys.
 Buried collectible spots are randomized each time the page reloads.
 Found item names are shown in Japanese.
+The cat switches to a short digging animation before each item is revealed.
 
 ## GitHub Pages
 

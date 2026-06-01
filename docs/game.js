@@ -23,6 +23,7 @@ const state = {
   notice: "",
   noticeTimer: 0,
   digTimer: 0,
+  digCompleteSpot: null,
   props: [],
   collision: null,
   hooks: null,
@@ -61,6 +62,7 @@ async function boot() {
     }),
   );
   state.images.set("cat", await loadImage("assets/cat/munchkin-walk-sheet.png"));
+  state.images.set("catDig", await loadImage("assets/cat/munchkin-dig-sheet.png"));
   state.images.set("items", await loadImage("assets/items/collectibles-sheet.png"));
   state.props = props.placements;
   initDigSpots();
@@ -178,7 +180,7 @@ function setDestinationFromClientPoint(clientX, clientY) {
   if (spot) {
     state.pendingDigSpot = spot;
     state.destination = nearestWalkablePoint(spot.x, spot.y + 18);
-    setNotice("...");
+    setNotice("ほりほり...");
     return;
   }
   state.destination = nearestWalkablePoint(x, y);
@@ -203,6 +205,7 @@ function setNotice(text) {
 }
 
 function tryDig() {
+  if (state.digTimer > 0) return false;
   const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 58);
   if (!spot) {
     setNotice("ここには何もなさそう");
@@ -214,19 +217,35 @@ function tryDig() {
 
 function digSpot(spot) {
   if (!spot || spot.found) return;
-  spot.found = true;
   state.pendingDigSpot = null;
   state.destination = null;
-  state.digTimer = 0.45;
+  state.digCompleteSpot = spot;
+  state.digTimer = 0.7;
+  setNotice("ほりほり...");
+}
+
+function collectDugSpot() {
+  const spot = state.digCompleteSpot;
+  if (!spot || spot.found) return;
+  spot.found = true;
   state.collection[spot.item] += 1;
   const item = itemTypes[spot.item];
   setNotice(`${item.kind === "trash" ? "ごみ発見" : "宝発見"}: ${item.name}`);
   updateHud();
+  state.digCompleteSpot = null;
 }
 
 function update(dt) {
   state.noticeTimer = Math.max(0, state.noticeTimer - dt);
+  const wasDigging = state.digTimer > 0;
   state.digTimer = Math.max(0, state.digTimer - dt);
+  if (wasDigging && state.digTimer === 0) {
+    collectDugSpot();
+  }
+  if (state.digTimer > 0) {
+    state.cat.frameTime += dt;
+    return;
+  }
 
   let dx = 0;
   let dy = 0;
@@ -285,10 +304,12 @@ function drawProp(item) {
 }
 
 function drawCat() {
-  const image = state.images.get("cat");
+  const digging = state.digTimer > 0;
+  const image = state.images.get(digging ? "catDig" : "cat");
   const frameSize = image.width / 2;
-  const sx = (state.cat.frame % 2) * frameSize;
-  const sy = Math.floor(state.cat.frame / 2) * frameSize;
+  const digFrame = digging ? Math.min(3, Math.floor((1 - state.digTimer / 0.7) * 4)) : state.cat.frame;
+  const sx = (digFrame % 2) * frameSize;
+  const sy = Math.floor(digFrame / 2) * frameSize;
   const width = 78;
   const height = 78;
   ctx.save();
