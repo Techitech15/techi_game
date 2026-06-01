@@ -12,6 +12,7 @@ python -m http.server 8061 --bind 127.0.0.1
 ```
 
 Controls: tap/click to move, tap suspicious dirt to dig, or use WASD / arrow keys.
+Buried collectible spots are randomized each time the page reloads.
 
 ## GitHub Pages
 

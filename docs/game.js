@@ -3,13 +3,14 @@ const ctx = canvas.getContext("2d");
 const statusEl = document.querySelector("#status");
 
 const itemTypes = {
-  amber: { name: "Amber", kind: "treasure", color: "#f0ad36" },
-  bell: { name: "Tiny bell", kind: "treasure", color: "#f5d76c" },
-  ribbon: { name: "Ribbon", kind: "treasure", color: "#f27a9b" },
-  bottlecap: { name: "Bottle cap", kind: "trash", color: "#92a2b8" },
-  wrapper: { name: "Wrapper", kind: "trash", color: "#9ed17a" },
-  twig: { name: "Weird twig", kind: "trash", color: "#9a6a3c" },
+  amber: { name: "Amber", kind: "treasure", sprite: 0 },
+  bell: { name: "Tiny bell", kind: "treasure", sprite: 1 },
+  ribbon: { name: "Ribbon", kind: "treasure", sprite: 2 },
+  bottlecap: { name: "Bottle cap", kind: "trash", sprite: 3 },
+  wrapper: { name: "Wrapper", kind: "trash", sprite: 4 },
+  twig: { name: "Weird twig", kind: "trash", sprite: 5 },
 };
+const buriedItemIds = Object.keys(itemTypes);
 
 const keys = new Set();
 const state = {
@@ -60,6 +61,7 @@ async function boot() {
     }),
   );
   state.images.set("cat", await loadImage("assets/cat/munchkin-walk-sheet.png"));
+  state.images.set("items", await loadImage("assets/items/collectibles-sheet.png"));
   state.props = props.placements;
   initDigSpots();
   state.ready = true;
@@ -68,15 +70,33 @@ async function boot() {
 }
 
 function initDigSpots() {
-  state.collection = Object.fromEntries(Object.keys(itemTypes).map((id) => [id, 0]));
-  state.digSpots = [
-    { id: "buried_amber", x: 430, y: 318, item: "amber", found: false },
-    { id: "buried_bell", x: 592, y: 502, item: "bell", found: false },
-    { id: "buried_ribbon", x: 226, y: 450, item: "ribbon", found: false },
-    { id: "buried_bottlecap", x: 705, y: 310, item: "bottlecap", found: false },
-    { id: "buried_wrapper", x: 332, y: 640, item: "wrapper", found: false },
-    { id: "buried_twig", x: 824, y: 528, item: "twig", found: false },
+  state.collection = Object.fromEntries(buriedItemIds.map((id) => [id, 0]));
+  state.digSpots = [];
+  for (const item of buriedItemIds) {
+    const position = randomDigSpotPosition(state.digSpots);
+    state.digSpots.push({ id: `buried_${item}`, x: position.x, y: position.y, item, found: false });
+  }
+}
+
+function randomDigSpotPosition(existingSpots) {
+  for (let attempt = 0; attempt < 900; attempt++) {
+    const x = 110 + Math.random() * 804;
+    const y = 145 + Math.random() * 490;
+    if (!canMoveTo(x, y + 18)) continue;
+    if (Math.hypot(x - state.cat.x, y - state.cat.y) < 100) continue;
+    if (existingSpots.some((spot) => Math.hypot(x - spot.x, y - spot.y) < 115)) continue;
+    return { x, y };
+  }
+
+  const fallback = [
+    { x: 430, y: 318 },
+    { x: 592, y: 502 },
+    { x: 226, y: 450 },
+    { x: 705, y: 310 },
+    { x: 332, y: 640 },
+    { x: 824, y: 528 },
   ];
+  return fallback[existingSpots.length % fallback.length];
 }
 
 function updateHud() {
@@ -293,14 +313,7 @@ function drawDigSpot(spot) {
   ctx.translate(spot.x, spot.y);
 
   if (spot.found) {
-    const item = itemTypes[spot.item];
-    ctx.fillStyle = item.color;
-    ctx.strokeStyle = "rgba(40, 25, 12, 0.45)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.ellipse(0, -10, 12, 9, -0.25, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
+    drawCollectibleIcon(spot.item, -18, -44, 36);
   }
 
   ctx.fillStyle = "rgba(83, 55, 25, 0.7)";
@@ -323,6 +336,16 @@ function drawDigSpot(spot) {
     ctx.stroke();
   }
   ctx.restore();
+}
+
+function drawCollectibleIcon(itemId, x, y, size) {
+  const image = state.images.get("items");
+  const item = itemTypes[itemId];
+  if (!image || !item) return;
+  const cellSize = image.width / 3;
+  const sx = (item.sprite % 3) * cellSize;
+  const sy = Math.floor(item.sprite / 3) * cellSize;
+  ctx.drawImage(image, sx, sy, cellSize, cellSize, x, y, size, size);
 }
 
 function drawNotice() {
