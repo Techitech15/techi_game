@@ -518,6 +518,13 @@
       }
 
       @media (max-width: 760px) and (orientation: portrait) {
+        .frame {
+          box-sizing: border-box;
+          padding-top: 58px;
+          padding-bottom: 44px;
+          background: #142415;
+        }
+
         .hud-title {
           left: 4px;
           top: 4px;
@@ -554,11 +561,13 @@
         }
 
         .top-progress {
-          left: 4px;
-          top: 34px;
-          width: 43%;
+          left: 108px;
+          right: 122px;
+          top: 4px;
+          width: auto;
           padding: 3px 5px;
           border-width: 2px;
+          gap: 3px;
         }
 
         .level {
@@ -576,29 +585,12 @@
         }
 
         .life-bar {
-          right: 4px;
-          top: 31px;
-          min-width: 78px;
-          padding: 2px 4px;
-          border-width: 2px;
-        }
-
-        .heart {
-          font-size: 13px;
-        }
-
-        .heart-track {
-          height: 9px;
-          border-width: 1px;
-        }
-
-        .heart-count {
-          font-size: 9px;
+          display: none;
         }
 
         .mission-panel {
           left: 4px;
-          top: 63px;
+          top: 33px;
           width: 104px;
           padding: 0 5px 6px;
           border-width: 2px;
@@ -663,7 +655,7 @@
 
         .bottom-tray {
           left: 4px;
-          bottom: 4px;
+          bottom: 6px;
           gap: 3px;
           padding: 3px;
           border-width: 2px;
@@ -695,7 +687,7 @@
         }
 
         .dig-button {
-          bottom: 4px;
+          bottom: 6px;
           min-width: 88px;
           padding: 4px 9px 6px;
           border-width: 2px;
@@ -705,7 +697,7 @@
 
         .side-actions {
           right: 4px;
-          bottom: 4px;
+          bottom: 6px;
           gap: 3px;
         }
 
@@ -732,7 +724,7 @@
     <main class="frame">
       <canvas id="game" width="1024" height="768"></canvas>
       <div class="hud" aria-hidden="false">
-        <div class="hud-title wood">ねこの穴掘り 🐾</div>
+        <div class="hud-title wood">テチの穴掘り</div>
         <div class="top-progress" aria-label="レベル">
           <div class="level">Lv. 3</div>
           <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
@@ -780,6 +772,6 @@
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=15"></script>
+    <script src="game.js?v=16"></script>
   </body>
 </html>
