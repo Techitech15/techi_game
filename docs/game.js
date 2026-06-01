@@ -13,6 +13,8 @@ const hudElements = {
   xpCount: document.querySelector("#xp-count"),
   xpFill: document.querySelector("#xp-fill"),
   digButton: document.querySelector("#dig-button"),
+  missionPanel: document.querySelector(".mission-panel"),
+  missionTitle: document.querySelector(".mission-title"),
 };
 
 const itemTypes = {
@@ -753,6 +755,37 @@ addEventListener("keydown", (event) => {
 
 addEventListener("keyup", (event) => {
   keys.delete(event.key.toLowerCase());
+});
+
+const compactMissionQuery = matchMedia("(max-width: 760px) and (orientation: portrait)");
+
+function setMissionCollapsed(collapsed) {
+  hudElements.missionPanel.classList.toggle("is-mission-collapsed", collapsed);
+  hudElements.missionTitle.setAttribute("aria-expanded", String(!collapsed));
+}
+
+hudElements.missionTitle.setAttribute("role", "button");
+hudElements.missionTitle.setAttribute("tabindex", "0");
+setMissionCollapsed(compactMissionQuery.matches);
+
+const handleMissionMediaChange = (event) => setMissionCollapsed(event.matches);
+if (compactMissionQuery.addEventListener) {
+  compactMissionQuery.addEventListener("change", handleMissionMediaChange);
+} else {
+  compactMissionQuery.addListener(handleMissionMediaChange);
+}
+
+hudElements.missionTitle.addEventListener("pointerdown", (event) => {
+  if (!compactMissionQuery.matches) return;
+  event.preventDefault();
+  event.stopPropagation();
+  setMissionCollapsed(!hudElements.missionPanel.classList.contains("is-mission-collapsed"));
+});
+
+hudElements.missionTitle.addEventListener("keydown", (event) => {
+  if (!compactMissionQuery.matches || !["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  setMissionCollapsed(!hudElements.missionPanel.classList.contains("is-mission-collapsed"));
 });
 
 hudElements.digButton.addEventListener("pointerdown", (event) => {

@@ -519,13 +519,13 @@
 
       @media (max-width: 760px) and (orientation: portrait) {
         .hud-title {
-          left: 6px;
-          top: 6px;
-          min-width: 118px;
-          padding: 5px 9px 7px;
+          left: 4px;
+          top: 4px;
+          min-width: 92px;
+          padding: 4px 7px 5px;
           border-width: 2px;
-          border-radius: 12px 8px 14px 8px;
-          font-size: 16px;
+          border-radius: 10px 7px 12px 7px;
+          font-size: 13px;
         }
 
         .hud-title::after,
@@ -535,111 +535,137 @@
         }
 
         .top-counters {
-          right: 5px;
-          top: 5px;
-          gap: 3px;
+          right: 4px;
+          top: 4px;
+          gap: 2px;
         }
 
         .counter {
           min-width: 0;
-          padding: 3px 5px;
+          padding: 2px 4px;
           border-width: 2px;
-          font-size: 11px;
+          font-size: 9px;
         }
 
         .counter-icon {
-          width: 18px;
-          height: 18px;
-          font-size: 12px;
+          width: 14px;
+          height: 14px;
+          font-size: 10px;
         }
 
         .top-progress {
-          left: 6px;
-          top: 46px;
-          width: 46%;
-          padding: 4px 6px;
+          left: 4px;
+          top: 34px;
+          width: 43%;
+          padding: 3px 5px;
           border-width: 2px;
         }
 
         .level {
-          font-size: 13px;
+          font-size: 11px;
         }
 
         .xp-track {
-          height: 13px;
+          height: 10px;
           border-width: 1px;
         }
 
         .xp-count {
-          min-width: 34px;
-          font-size: 10px;
+          min-width: 28px;
+          font-size: 9px;
         }
 
         .life-bar {
-          right: 5px;
-          top: 43px;
-          min-width: 96px;
-          padding: 3px 5px;
+          right: 4px;
+          top: 31px;
+          min-width: 78px;
+          padding: 2px 4px;
           border-width: 2px;
         }
 
         .heart {
-          font-size: 17px;
+          font-size: 13px;
         }
 
         .heart-track {
-          height: 12px;
+          height: 9px;
           border-width: 1px;
         }
 
         .heart-count {
-          font-size: 11px;
+          font-size: 9px;
         }
 
         .mission-panel {
-          left: 6px;
-          top: 84px;
-          width: 126px;
-          padding: 0 6px 7px;
+          left: 4px;
+          top: 63px;
+          width: 104px;
+          padding: 0 5px 6px;
           border-width: 2px;
-          border-radius: 9px;
+          border-radius: 8px;
         }
 
         .mission-title {
-          margin-top: -9px;
-          margin-bottom: 6px;
-          padding: 3px 8px;
+          margin-top: -8px;
+          margin-bottom: 5px;
+          padding: 2px 7px;
           border-width: 2px;
-          border-radius: 8px;
-          font-size: 13px;
+          border-radius: 7px;
+          font-size: 11px;
+          cursor: pointer;
+          pointer-events: auto;
+        }
+
+        .mission-title::after {
+          content: " -";
         }
 
         .mission-list {
-          gap: 4px;
+          gap: 3px;
         }
 
         .mission {
-          grid-template-columns: 18px 1fr;
-          gap: 4px;
-          padding-bottom: 4px;
+          grid-template-columns: 14px 1fr;
+          gap: 3px;
+          padding-bottom: 3px;
           border-bottom-width: 1px;
         }
 
         .mission-icon {
-          font-size: 15px;
+          font-size: 12px;
         }
 
         .mission-text {
           gap: 1px;
-          font-size: 10px;
+          font-size: 8px;
           line-height: 1.15;
         }
 
+        .mission-panel.is-mission-collapsed {
+          width: auto;
+          padding: 0 4px 2px;
+          background: transparent;
+          border-color: transparent;
+          box-shadow: none;
+        }
+
+        .mission-panel.is-mission-collapsed .mission-title {
+          margin: 0;
+        }
+
+        .mission-panel.is-mission-collapsed .mission-title::after {
+          content: " +";
+        }
+
+        .mission-panel.is-mission-collapsed .mission-list {
+          display: none;
+        }
+
         .bottom-tray {
-          left: 5px;
-          bottom: 5px;
-          gap: 4px;
-          padding: 4px;
+          left: 4px;
+          bottom: 4px;
+          gap: 3px;
+          padding: 3px;
           border-width: 2px;
         }
 
@@ -648,46 +674,46 @@
         }
 
         .tool-slot {
-          width: 38px;
+          width: 30px;
           border-width: 2px;
-          border-radius: 8px;
-          font-size: 19px;
+          border-radius: 7px;
+          font-size: 15px;
         }
 
         .tool-icon {
-          width: 20px;
-          height: 20px;
+          width: 16px;
+          height: 16px;
         }
 
         .tool-count {
           right: -4px;
           bottom: -4px;
-          min-width: 16px;
-          height: 16px;
+          min-width: 13px;
+          height: 13px;
           border-width: 1px;
-          font-size: 10px;
+          font-size: 8px;
         }
 
         .dig-button {
-          bottom: 6px;
-          min-width: 112px;
-          padding: 6px 11px 8px;
-          border-width: 3px;
-          border-radius: 16px;
-          font-size: 22px;
+          bottom: 4px;
+          min-width: 88px;
+          padding: 4px 9px 6px;
+          border-width: 2px;
+          border-radius: 13px;
+          font-size: 17px;
         }
 
         .side-actions {
-          right: 5px;
-          bottom: 5px;
-          gap: 4px;
+          right: 4px;
+          bottom: 4px;
+          gap: 3px;
         }
 
         .small-action {
-          width: 38px;
-          padding: 4px 2px;
+          width: 30px;
+          padding: 3px 2px;
           border-width: 2px;
-          border-radius: 12px;
+          border-radius: 9px;
         }
 
         .small-action span:last-child {
@@ -695,9 +721,9 @@
         }
 
         .small-icon {
-          width: 23px;
-          height: 23px;
-          font-size: 16px;
+          width: 18px;
+          height: 18px;
+          font-size: 13px;
         }
       }
     </style>
@@ -754,6 +780,6 @@
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=14"></script>
+    <script src="game.js?v=15"></script>
   </body>
 </html>
