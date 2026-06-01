@@ -366,28 +366,75 @@ function playDiscoverySound(kind) {
   unlockAudio();
 
   const now = audio.currentTime;
+  if (kind === "trash") {
+    playTrashDiscoverySound(audio, now);
+    return;
+  }
+
   const output = audio.createGain();
   output.gain.setValueAtTime(0.0001, now);
-  output.gain.exponentialRampToValueAtTime(kind === "treasure" ? 0.18 : 0.11, now + 0.02);
+  output.gain.exponentialRampToValueAtTime(0.18, now + 0.02);
   output.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
   output.connect(audio.destination);
 
-  const notes = kind === "treasure" ? [784, 988, 1319] : [196, 147];
+  const notes = [784, 988, 1319];
   notes.forEach((frequency, index) => {
     const start = now + index * 0.09;
     const osc = audio.createOscillator();
     const gain = audio.createGain();
-    osc.type = kind === "treasure" ? "triangle" : "sine";
+    osc.type = "triangle";
     osc.frequency.setValueAtTime(frequency, start);
     osc.frequency.exponentialRampToValueAtTime(frequency * 1.04, start + 0.08);
     gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.exponentialRampToValueAtTime(kind === "treasure" ? 0.28 : 0.18, start + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.28, start + 0.015);
     gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.22);
     osc.connect(gain);
     gain.connect(output);
     osc.start(start);
     osc.stop(start + 0.24);
   });
+}
+
+function playTrashDiscoverySound(audio, now) {
+  const output = audio.createGain();
+  output.gain.setValueAtTime(0.0001, now);
+  output.gain.exponentialRampToValueAtTime(0.16, now + 0.015);
+  output.gain.exponentialRampToValueAtTime(0.0001, now + 0.36);
+  output.connect(audio.destination);
+
+  const osc = audio.createOscillator();
+  const toneGain = audio.createGain();
+  osc.type = "square";
+  osc.frequency.setValueAtTime(155, now);
+  osc.frequency.exponentialRampToValueAtTime(82, now + 0.23);
+  toneGain.gain.setValueAtTime(0.0001, now);
+  toneGain.gain.exponentialRampToValueAtTime(0.18, now + 0.012);
+  toneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+  osc.connect(toneGain);
+  toneGain.connect(output);
+  osc.start(now);
+  osc.stop(now + 0.3);
+
+  const noiseLength = Math.max(1, Math.floor(audio.sampleRate * 0.12));
+  const noiseBuffer = audio.createBuffer(1, noiseLength, audio.sampleRate);
+  const noiseData = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < noiseLength; i++) {
+    noiseData[i] = (Math.random() * 2 - 1) * (1 - i / noiseLength);
+  }
+
+  const noise = audio.createBufferSource();
+  const filter = audio.createBiquadFilter();
+  const noiseGain = audio.createGain();
+  noise.buffer = noiseBuffer;
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(680, now);
+  noiseGain.gain.setValueAtTime(0.0001, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.2, now + 0.01);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(output);
+  noise.start(now);
 }
 
 function tryDig() {
