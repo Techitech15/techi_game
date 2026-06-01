@@ -15,6 +15,7 @@ Controls: tap/click to move, tap suspicious dirt to dig, or use WASD / arrow key
 Buried collectible spots are randomized each time the page reloads.
 Found item names are shown in Japanese.
 The cat switches to a short digging animation before each item is revealed.
+The digging sheet uses a solid alpha matte so it stays readable over the map.
 
 ## GitHub Pages
 
