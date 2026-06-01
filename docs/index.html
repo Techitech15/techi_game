@@ -462,13 +462,15 @@
         height: 100%;
         object-fit: contain;
         filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.38));
+        pointer-events: none;
       }
 
       .bag-close {
         position: absolute;
-        right: 7%;
-        top: 4.4%;
-        width: 13%;
+        right: 4%;
+        top: 2%;
+        z-index: 3;
+        width: 20%;
         aspect-ratio: 1;
         border: 0;
         border-radius: 50%;
@@ -898,6 +900,47 @@
           height: 18px;
           font-size: 13px;
         }
+
+        .bag-modal {
+          padding: 4px;
+          align-items: center;
+        }
+
+        .bag-card {
+          width: min(54vw, 220px);
+          max-height: calc(100% - 8px);
+        }
+
+        .bag-close {
+          right: 2%;
+          top: 1%;
+          width: 24%;
+        }
+
+        .bag-items {
+          left: 14%;
+          right: 14%;
+          top: 25%;
+          bottom: 13%;
+          grid-template-columns: 1fr;
+          gap: 4px;
+        }
+
+        .bag-item {
+          grid-template-columns: 27px 1fr;
+          min-height: 32px;
+          padding: 3px;
+        }
+
+        .bag-item-icon {
+          width: 27px;
+        }
+
+        .bag-empty {
+          margin-top: 28%;
+          padding: 7px 9px;
+          font-size: 10px;
+        }
       }
     </style>
   </head>
@@ -963,6 +1006,6 @@
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=17"></script>
+    <script src="game.js?v=18"></script>
   </body>
 </html>

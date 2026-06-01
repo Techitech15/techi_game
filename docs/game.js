@@ -837,6 +837,12 @@ hudElements.bagClose.addEventListener("pointerdown", (event) => {
   setBagOpen(false);
 });
 
+hudElements.bagClose.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  setBagOpen(false);
+});
+
 hudElements.bagModal.addEventListener("pointerdown", (event) => {
   if (event.target !== hudElements.bagModal) return;
   event.preventDefault();
