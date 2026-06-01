@@ -27,6 +27,7 @@ const state = {
   noticeTimer: 0,
   digTimer: 0,
   digCompleteSpot: null,
+  audio: null,
   props: [],
   collision: null,
   hooks: null,
@@ -345,6 +346,50 @@ function setNotice(text) {
   state.noticeTimer = 1.8;
 }
 
+function getAudioContext() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+  if (!state.audio) state.audio = new AudioContextClass();
+  return state.audio;
+}
+
+function unlockAudio() {
+  const audio = getAudioContext();
+  if (audio && audio.state === "suspended") {
+    audio.resume();
+  }
+}
+
+function playDiscoverySound(kind) {
+  const audio = getAudioContext();
+  if (!audio) return;
+  unlockAudio();
+
+  const now = audio.currentTime;
+  const output = audio.createGain();
+  output.gain.setValueAtTime(0.0001, now);
+  output.gain.exponentialRampToValueAtTime(kind === "treasure" ? 0.18 : 0.11, now + 0.02);
+  output.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
+  output.connect(audio.destination);
+
+  const notes = kind === "treasure" ? [784, 988, 1319] : [196, 147];
+  notes.forEach((frequency, index) => {
+    const start = now + index * 0.09;
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.type = kind === "treasure" ? "triangle" : "sine";
+    osc.frequency.setValueAtTime(frequency, start);
+    osc.frequency.exponentialRampToValueAtTime(frequency * 1.04, start + 0.08);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(kind === "treasure" ? 0.28 : 0.18, start + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.22);
+    osc.connect(gain);
+    gain.connect(output);
+    osc.start(start);
+    osc.stop(start + 0.24);
+  });
+}
+
 function tryDig() {
   if (state.digTimer > 0) return false;
   const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 58);
@@ -373,6 +418,7 @@ function collectDugSpot() {
   state.collection[spot.item] += 1;
   const item = itemTypes[spot.item];
   setNotice(`${item.kind === "trash" ? "ごみ発見" : "宝発見"}: ${item.name}`);
+  playDiscoverySound(item.kind);
   updateHud();
   state.digCompleteSpot = null;
 }
@@ -591,6 +637,7 @@ function tick(now) {
 }
 
 addEventListener("keydown", (event) => {
+  unlockAudio();
   keys.add(event.key.toLowerCase());
   if (event.key === " ") {
     event.preventDefault();
@@ -607,6 +654,7 @@ addEventListener("keyup", (event) => {
 
 canvas.addEventListener("pointerdown", (event) => {
   event.preventDefault();
+  unlockAudio();
   canvas.setPointerCapture?.(event.pointerId);
   setDestinationFromClientPoint(event.clientX, event.clientY);
 });
