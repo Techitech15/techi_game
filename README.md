@@ -16,3 +16,7 @@ Controls: WASD or arrow keys.
 ## GitHub Pages
 
 This repository includes a GitHub Actions workflow that deploys the static site in `docs/` to GitHub Pages.
+
+## License
+
+MIT License.
