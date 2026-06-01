@@ -3,12 +3,12 @@ const ctx = canvas.getContext("2d");
 const statusEl = document.querySelector("#status");
 
 const itemTypes = {
-  amber: { name: "Amber", kind: "treasure", sprite: 0 },
-  bell: { name: "Tiny bell", kind: "treasure", sprite: 1 },
-  ribbon: { name: "Ribbon", kind: "treasure", sprite: 2 },
-  bottlecap: { name: "Bottle cap", kind: "trash", sprite: 3 },
-  wrapper: { name: "Wrapper", kind: "trash", sprite: 4 },
-  twig: { name: "Weird twig", kind: "trash", sprite: 5 },
+  amber: { name: "琥珀", kind: "treasure", sprite: 0 },
+  bell: { name: "小さな鈴", kind: "treasure", sprite: 1 },
+  ribbon: { name: "ピンクのリボン", kind: "treasure", sprite: 2 },
+  bottlecap: { name: "王冠キャップ", kind: "trash", sprite: 3 },
+  wrapper: { name: "キャンディの包み紙", kind: "trash", sprite: 4 },
+  twig: { name: "へんな小枝", kind: "trash", sprite: 5 },
 };
 const buriedItemIds = Object.keys(itemTypes);
 
@@ -110,7 +110,7 @@ function updateHud() {
     .filter(([id, count]) => count > 0 && itemTypes[id].kind === "trash")
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
     .join(" / ");
-  statusEl.textContent = `Collection ${found}/${total}${treasure ? ` | Treasure: ${treasure}` : ""}${trash ? ` | Trash: ${trash}` : ""}`;
+  statusEl.textContent = `コレクション ${found}/${total}${treasure ? ` | 宝: ${treasure}` : ""}${trash ? ` | ごみ: ${trash}` : ""}`;
 }
 
 function pointInPolygon(point, polygon) {
@@ -205,7 +205,7 @@ function setNotice(text) {
 function tryDig() {
   const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 58);
   if (!spot) {
-    setNotice("Nothing here");
+    setNotice("ここには何もなさそう");
     return false;
   }
   digSpot(spot);
@@ -220,7 +220,7 @@ function digSpot(spot) {
   state.digTimer = 0.45;
   state.collection[spot.item] += 1;
   const item = itemTypes[spot.item];
-  setNotice(`${item.kind === "trash" ? "Found" : "Treasure"}: ${item.name}`);
+  setNotice(`${item.kind === "trash" ? "ごみ発見" : "宝発見"}: ${item.name}`);
   updateHud();
 }
 
@@ -309,12 +309,8 @@ function digBob() {
 
 function drawDigSpot(spot) {
   ctx.save();
-  ctx.globalAlpha = spot.found ? 0.45 : 1;
   ctx.translate(spot.x, spot.y);
-
-  if (spot.found) {
-    drawCollectibleIcon(spot.item, -18, -44, 36);
-  }
+  ctx.globalAlpha = spot.found ? 0.62 : 1;
 
   ctx.fillStyle = "rgba(83, 55, 25, 0.7)";
   ctx.beginPath();
@@ -334,6 +330,10 @@ function drawDigSpot(spot) {
     ctx.moveTo(4, -16);
     ctx.lineTo(1, -9);
     ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  if (spot.found) {
+    drawCollectibleIcon(spot.item, -22, -48, 44);
   }
   ctx.restore();
 }
