@@ -24,6 +24,10 @@
 
       .frame {
         width: min(100%, 1024px);
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
       }
 
       canvas {
@@ -32,7 +36,6 @@
         aspect-ratio: 4 / 3;
         image-rendering: auto;
         background: #243a1c;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
         touch-action: none;
         user-select: none;
         -webkit-user-select: none;
@@ -40,19 +43,533 @@
       }
 
       .status {
-        min-height: 24px;
-        margin-top: 10px;
-        font-size: 13px;
-        line-height: 1.45;
-        opacity: 0.78;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      .hud {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        color: #5a2d10;
+        font-weight: 800;
+        text-shadow: 0 1px 0 rgba(255, 243, 194, 0.8);
+      }
+
+      .wood {
+        background:
+          linear-gradient(180deg, rgba(255, 236, 159, 0.96), rgba(228, 151, 57, 0.96)),
+          repeating-linear-gradient(90deg, rgba(130, 69, 20, 0.16) 0 16px, rgba(255, 255, 255, 0.06) 16px 32px);
+        border: 3px solid #784111;
+        box-shadow:
+          inset 0 3px 0 rgba(255, 255, 255, 0.42),
+          inset 0 -5px 0 rgba(112, 54, 14, 0.32),
+          0 5px 0 rgba(77, 39, 12, 0.56),
+          0 9px 18px rgba(33, 25, 7, 0.3);
+      }
+
+      .hud-title {
+        position: absolute;
+        left: 20px;
+        top: 18px;
+        min-width: 270px;
+        padding: 13px 26px 15px;
+        border-radius: 18px 10px 22px 10px;
+        font-size: clamp(22px, 3.2vw, 36px);
+        letter-spacing: 0;
+      }
+
+      .hud-title::after,
+      .mission-panel::before,
+      .bottom-tray::before {
+        content: "";
+        position: absolute;
+        inset: -10px;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 10% 18%, #86b933 0 8px, transparent 9px),
+          radial-gradient(circle at 94% 0%, #79a82e 0 10px, transparent 11px),
+          radial-gradient(circle at 98% 100%, #8ebc38 0 12px, transparent 13px);
+      }
+
+      .top-progress {
+        position: absolute;
+        left: 50%;
+        top: 18px;
+        transform: translateX(-50%);
+        width: min(32%, 380px);
+        min-width: 250px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #b56c25, #75400f);
+        border: 3px solid #4f2a0c;
+        box-shadow: inset 0 3px 0 rgba(255, 208, 95, 0.42), 0 4px 12px rgba(26, 19, 5, 0.32);
+        color: #fff1c4;
+        text-shadow: 0 2px 0 #3a1a08;
+      }
+
+      .level {
+        font-size: clamp(18px, 2.3vw, 26px);
+      }
+
+      .xp-track {
+        height: 22px;
+        border-radius: 999px;
+        background: #4a260b;
+        border: 2px solid #d39a42;
+        overflow: hidden;
+      }
+
+      .xp-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(180deg, #baff58, #4aa51f);
+        box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4);
+        transition: width 220ms ease;
+      }
+
+      .xp-count {
+        min-width: 68px;
+        text-align: right;
+        font-size: clamp(14px, 1.9vw, 20px);
+      }
+
+      .top-counters {
+        position: absolute;
+        right: 18px;
+        top: 16px;
+        display: grid;
+        grid-template-columns: repeat(3, auto) 46px;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .counter,
+      .round-button,
+      .life-bar,
+      .tool-slot,
+      .small-action {
+        pointer-events: auto;
+      }
+
+      .counter {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 80px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #a76424, #63330d);
+        border: 3px solid #4b270b;
+        color: #fff1cc;
+        font-size: clamp(15px, 2vw, 22px);
+        text-shadow: 0 2px 0 #321707;
+        box-shadow: inset 0 2px 0 rgba(255, 220, 121, 0.36), 0 4px 11px rgba(24, 16, 4, 0.3);
+      }
+
+      .counter-icon,
+      .tool-icon,
+      .small-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff5a5, #e68c18 62%, #8b4309);
+        color: #69300a;
+        text-shadow: none;
+      }
+
+      .round-button {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 3px solid #4a260b;
+        background: radial-gradient(circle at 35% 28%, #f8dda0, #9a5b1d 68%, #4c2609);
+        color: #371604;
+        font-size: 25px;
+        box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.32), 0 4px 10px rgba(23, 15, 4, 0.34);
+      }
+
+      .life-bar {
+        position: absolute;
+        right: 18px;
+        top: 76px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 9px;
+        min-width: 210px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #a86626, #6d380e);
+        border: 3px solid #4b270b;
+        color: white;
+        text-shadow: 0 2px 0 #6d140e;
+      }
+
+      .heart {
+        font-size: 30px;
+      }
+
+      .heart-track {
+        height: 24px;
+        border-radius: 999px;
+        background: #6c1c13;
+        border: 2px solid #ffb58f;
+        overflow: hidden;
+      }
+
+      .heart-fill {
+        height: 100%;
+        background: linear-gradient(180deg, #ff7865, #d8261b);
+      }
+
+      .heart-count {
+        font-size: 21px;
+      }
+
+      .mission-panel {
+        position: absolute;
+        left: 20px;
+        top: 152px;
+        width: min(270px, 29%);
+        padding: 0 16px 17px;
+        border-radius: 14px;
+      }
+
+      .mission-title {
+        position: relative;
+        margin: -17px auto 12px;
+        width: fit-content;
+        padding: 8px 22px;
+        border-radius: 12px;
+        background: linear-gradient(180deg, #7db72f, #3f7f1e);
+        border: 3px solid #315d13;
+        color: #fff3bb;
+        font-size: clamp(18px, 2.2vw, 26px);
+        text-shadow: 0 2px 0 #21420d;
+      }
+
+      .mission-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .mission {
+        display: grid;
+        grid-template-columns: 35px 1fr;
+        gap: 8px;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 2px dashed rgba(133, 77, 25, 0.36);
+      }
+
+      .mission:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .mission-icon {
+        font-size: 28px;
+        text-align: center;
+      }
+
+      .mission-text {
+        display: grid;
+        gap: 3px;
+        font-size: clamp(13px, 1.7vw, 17px);
+      }
+
+      .mission-count {
+        color: #3d8d22;
+      }
+
+      .bottom-tray {
+        position: absolute;
+        left: 18px;
+        bottom: 16px;
+        display: flex;
+        gap: 9px;
+        padding: 10px;
+        border-radius: 12px;
+      }
+
+      .tool-slot {
+        position: relative;
+        width: clamp(50px, 6.8vw, 68px);
+        aspect-ratio: 1;
+        border-radius: 12px;
+        border: 3px solid #8c4d16;
+        background: linear-gradient(180deg, #fff0bb, #e7b463);
+        box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.54), 0 3px 0 #68350f;
+        font-size: clamp(26px, 4vw, 42px);
+      }
+
+      .tool-count {
+        position: absolute;
+        right: -5px;
+        bottom: -5px;
+        min-width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: #5b2c0d;
+        border: 2px solid #fff1bd;
+        color: white;
+        font-size: 15px;
+        text-shadow: 0 1px 0 black;
+      }
+
+      .dig-button {
+        position: absolute;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        min-width: min(260px, 31%);
+        padding: 16px 34px 18px;
+        border-radius: 24px;
+        border: 4px solid #a75b13;
+        background: linear-gradient(180deg, #ffe482, #f3a722 70%, #c77512);
+        color: #74330a;
+        font-size: clamp(30px, 5vw, 50px);
+        font-weight: 900;
+        text-shadow: 0 2px 0 rgba(255, 244, 184, 0.9);
+        box-shadow:
+          inset 0 5px 0 rgba(255, 255, 255, 0.42),
+          inset 0 -6px 0 rgba(142, 78, 9, 0.26),
+          0 7px 0 #7f410d,
+          0 12px 20px rgba(33, 22, 5, 0.34);
+        pointer-events: auto;
+      }
+
+      .dig-button:active {
+        transform: translate(-50%, 5px);
+        box-shadow:
+          inset 0 4px 0 rgba(255, 255, 255, 0.36),
+          inset 0 -4px 0 rgba(142, 78, 9, 0.26),
+          0 2px 0 #7f410d,
+          0 7px 12px rgba(33, 22, 5, 0.28);
+      }
+
+      .side-actions {
+        position: absolute;
+        right: 22px;
+        bottom: 18px;
+        display: flex;
+        gap: 14px;
+      }
+
+      .small-action {
+        width: clamp(64px, 8.4vw, 88px);
+        display: grid;
+        justify-items: center;
+        gap: 2px;
+        padding: 9px 6px 7px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #bd762e, #6a350c);
+        border: 3px solid #4d2609;
+        color: #fff1c5;
+        font-weight: 900;
+        text-shadow: 0 2px 0 #321707;
+        box-shadow: inset 0 3px 0 rgba(255, 224, 142, 0.38), 0 5px 0 rgba(48, 25, 7, 0.6);
+      }
+
+      .small-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 29px;
+      }
+
+      @media (max-width: 760px) {
+        body {
+          padding: 0;
+        }
+
+        .frame {
+          width: 100%;
+          border-radius: 0;
+        }
+
+        .hud-title {
+          left: 10px;
+          top: 8px;
+          min-width: 162px;
+          padding: 8px 14px 10px;
+        }
+
+        .top-progress {
+          top: 64px;
+          left: 10px;
+          transform: none;
+          width: 48%;
+          min-width: 0;
+          padding: 6px 8px;
+          gap: 6px;
+        }
+
+        .top-counters {
+          right: 8px;
+          top: 8px;
+          grid-template-columns: repeat(3, auto);
+          gap: 4px;
+        }
+
+        .counter {
+          min-width: 46px;
+          padding: 5px 7px;
+          gap: 4px;
+        }
+
+        .counter-icon {
+          width: 22px;
+          height: 22px;
+        }
+
+        .round-button {
+          display: none;
+        }
+
+        .life-bar {
+          right: 8px;
+          top: 55px;
+          min-width: 126px;
+          padding: 4px 7px;
+          gap: 5px;
+        }
+
+        .heart {
+          font-size: 22px;
+        }
+
+        .heart-track {
+          height: 18px;
+        }
+
+        .heart-count {
+          font-size: 15px;
+        }
+
+        .mission-panel {
+          left: 8px;
+          top: 108px;
+          width: 160px;
+          padding: 0 8px 9px;
+        }
+
+        .mission-title {
+          padding: 5px 12px;
+          margin-top: -12px;
+        }
+
+        .mission-list {
+          gap: 6px;
+        }
+
+        .mission {
+          grid-template-columns: 24px 1fr;
+          gap: 5px;
+          padding-bottom: 6px;
+        }
+
+        .mission-icon {
+          font-size: 20px;
+        }
+
+        .bottom-tray {
+          left: 8px;
+          bottom: 8px;
+          gap: 5px;
+          padding: 6px;
+        }
+
+        .dig-button {
+          bottom: 8px;
+          min-width: 145px;
+          padding: 10px 17px 12px;
+        }
+
+        .side-actions {
+          right: 8px;
+          bottom: 8px;
+          gap: 6px;
+        }
+
+        .small-action {
+          width: 52px;
+          padding: 5px 3px;
+          font-size: 11px;
+        }
+
+        .small-icon {
+          width: 29px;
+          height: 29px;
+          font-size: 19px;
+        }
       }
     </style>
   </head>
   <body>
     <main class="frame">
       <canvas id="game" width="1024" height="768"></canvas>
+      <div class="hud" aria-hidden="false">
+        <div class="hud-title wood">ねこの穴掘り 🐾</div>
+        <div class="top-progress" aria-label="レベル">
+          <div class="level">Lv. 3</div>
+          <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+          <div class="xp-count" id="xp-count">0/6</div>
+        </div>
+        <div class="top-counters">
+          <div class="counter"><span class="counter-icon">🪙</span><span id="coin-count">1,250</span></div>
+          <div class="counter"><span class="counter-icon">🧺</span><span id="collection-count">0</span></div>
+          <div class="counter"><span class="counter-icon">💎</span><span id="gem-count">0</span></div>
+          <button class="round-button" type="button" aria-label="設定">⚙</button>
+        </div>
+        <div class="life-bar" aria-label="ライフ">
+          <span class="heart">❤</span>
+          <div class="heart-track"><div class="heart-fill" style="width: 100%"></div></div>
+          <span class="heart-count">5/5</span>
+        </div>
+        <section class="mission-panel wood" aria-label="ミッション">
+          <div class="mission-title">ミッション</div>
+          <div class="mission-list">
+            <div class="mission">
+              <div class="mission-icon">🐾</div>
+              <div class="mission-text"><span>穴を6回掘る</span><span class="mission-count" id="mission-holes">(0/6)</span></div>
+            </div>
+            <div class="mission">
+              <div class="mission-icon">💎</div>
+              <div class="mission-text"><span>宝を3個見つける</span><span class="mission-count" id="mission-treasure">(0/3)</span></div>
+            </div>
+            <div class="mission">
+              <div class="mission-icon">🧺</div>
+              <div class="mission-text"><span>ごみを3個集める</span><span class="mission-count" id="mission-trash">(0/3)</span></div>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-tray wood">
+          <button class="tool-slot" type="button" aria-label="スコップ"><span class="tool-icon">⛏</span><span class="tool-count">5</span></button>
+          <button class="tool-slot" type="button" aria-label="コレクション"><span class="tool-icon">🐟</span><span class="tool-count" id="tool-collection">0</span></button>
+          <button class="tool-slot" type="button" aria-label="ベル"><span class="tool-icon">🔔</span><span class="tool-count" id="tool-bell">0</span></button>
+          <button class="tool-slot" type="button" aria-label="地図片"><span class="tool-icon">🗺</span><span class="tool-count">1</span></button>
+        </div>
+        <button class="dig-button" id="dig-button" type="button">🐾 掘る 🐾</button>
+        <div class="side-actions">
+          <button class="small-action" type="button" aria-label="バッグ"><span class="small-icon">🎒</span><span>バッグ</span></button>
+          <button class="small-action" type="button" aria-label="マップ"><span class="small-icon">🗺</span><span>マップ</span></button>
+        </div>
+      </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=12"></script>
+    <script src="game.js?v=13"></script>
   </body>
 </html>

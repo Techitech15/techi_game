@@ -1,6 +1,19 @@
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
 const statusEl = document.querySelector("#status");
+const hudElements = {
+  coinCount: document.querySelector("#coin-count"),
+  collectionCount: document.querySelector("#collection-count"),
+  gemCount: document.querySelector("#gem-count"),
+  missionHoles: document.querySelector("#mission-holes"),
+  missionTreasure: document.querySelector("#mission-treasure"),
+  missionTrash: document.querySelector("#mission-trash"),
+  toolCollection: document.querySelector("#tool-collection"),
+  toolBell: document.querySelector("#tool-bell"),
+  xpCount: document.querySelector("#xp-count"),
+  xpFill: document.querySelector("#xp-fill"),
+  digButton: document.querySelector("#dig-button"),
+};
 
 const itemTypes = {
   amber: { name: "琥珀", kind: "treasure", sprite: 0 },
@@ -109,6 +122,12 @@ function randomDigSpotPosition(existingSpots) {
 function updateHud() {
   const found = state.digSpots.filter((spot) => spot.found).length;
   const total = state.digSpots.length;
+  const treasureFound = Object.entries(state.collection)
+    .filter(([id]) => itemTypes[id].kind === "treasure")
+    .reduce((sum, [, count]) => sum + count, 0);
+  const trashFound = Object.entries(state.collection)
+    .filter(([id]) => itemTypes[id].kind === "trash")
+    .reduce((sum, [, count]) => sum + count, 0);
   const treasure = Object.entries(state.collection)
     .filter(([id, count]) => count > 0 && itemTypes[id].kind === "treasure")
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
@@ -118,6 +137,16 @@ function updateHud() {
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
     .join(" / ");
   statusEl.textContent = `コレクション ${found}/${total}${treasure ? ` | 宝: ${treasure}` : ""}${trash ? ` | ごみ: ${trash}` : ""}`;
+  hudElements.coinCount.textContent = (1250 + treasureFound * 125).toLocaleString("ja-JP");
+  hudElements.collectionCount.textContent = found;
+  hudElements.gemCount.textContent = treasureFound;
+  hudElements.missionHoles.textContent = `(${Math.min(found, total)}/${total})`;
+  hudElements.missionTreasure.textContent = `(${Math.min(treasureFound, 3)}/3)`;
+  hudElements.missionTrash.textContent = `(${Math.min(trashFound, 3)}/3)`;
+  hudElements.toolCollection.textContent = found;
+  hudElements.toolBell.textContent = state.collection.bell || 0;
+  hudElements.xpCount.textContent = `${found}/${total}`;
+  hudElements.xpFill.style.width = `${Math.min(100, (found / total) * 100)}%`;
 }
 
 function pointInPolygon(point, polygon) {
@@ -724,6 +753,13 @@ addEventListener("keydown", (event) => {
 
 addEventListener("keyup", (event) => {
   keys.delete(event.key.toLowerCase());
+});
+
+hudElements.digButton.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  unlockAudio();
+  tryDig();
 });
 
 canvas.addEventListener("pointerdown", (event) => {
