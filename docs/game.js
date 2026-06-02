@@ -54,8 +54,10 @@ const allItemIds = [...new Set(Object.values(itemCatalogs).flatMap((catalog) => 
 const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
+const ITEM_REPEAT_COUNT = 3;
+const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 10;
-const ASSET_VERSION = "23";
+const ASSET_VERSION = "24";
 
 const stages = [
   {
@@ -192,10 +194,10 @@ function initDigSpots() {
   }
 
   state.digSpots = [];
-  for (const item of currentBuriedItemIds()) {
+  currentBuriedItemIds().forEach((item, index) => {
     const position = randomDigSpotPosition(state.digSpots);
-    state.digSpots.push({ id: `${state.currentStage.id}_buried_${item}`, x: position.x, y: position.y, item, found: false });
-  }
+    state.digSpots.push({ id: `${state.currentStage.id}_buried_${index}_${item}`, x: position.x, y: position.y, item, found: false });
+  });
   state.stageRecords[state.currentStage.id] = { digSpots: state.digSpots };
 }
 
@@ -204,7 +206,7 @@ function currentItemTypes() {
 }
 
 function currentBuriedItemIds() {
-  return Object.keys(currentItemTypes());
+  return Object.keys(currentItemTypes()).flatMap((id) => Array.from({ length: ITEM_REPEAT_COUNT }, () => id));
 }
 
 function randomDigSpotPosition(existingSpots) {
@@ -213,7 +215,7 @@ function randomDigSpotPosition(existingSpots) {
     const y = 145 + Math.random() * 490;
     if (!canMoveTo(x, y + 18)) continue;
     if (Math.hypot(x - state.cat.x, y - state.cat.y) < 100) continue;
-    if (existingSpots.some((spot) => Math.hypot(x - spot.x, y - spot.y) < 115)) continue;
+    if (existingSpots.some((spot) => Math.hypot(x - spot.x, y - spot.y) < DIG_SPOT_MIN_DISTANCE)) continue;
     return { x, y };
   }
 
@@ -224,6 +226,18 @@ function randomDigSpotPosition(existingSpots) {
     { x: 705, y: 310 },
     { x: 332, y: 640 },
     { x: 824, y: 528 },
+    { x: 174, y: 242 },
+    { x: 276, y: 318 },
+    { x: 522, y: 228 },
+    { x: 770, y: 232 },
+    { x: 884, y: 360 },
+    { x: 168, y: 545 },
+    { x: 286, y: 528 },
+    { x: 510, y: 610 },
+    { x: 650, y: 610 },
+    { x: 790, y: 620 },
+    { x: 612, y: 420 },
+    { x: 388, y: 430 },
   ];
   return fallback[existingSpots.length % fallback.length];
 }
@@ -232,12 +246,10 @@ function updateHud() {
   const itemTypes = currentItemTypes();
   const found = state.digSpots.filter((spot) => spot.found).length;
   const total = state.digSpots.length;
-  const treasureFound = Object.entries(state.collection)
-    .filter(([id]) => itemTypes[id]?.kind === "treasure")
-    .reduce((sum, [, count]) => sum + count, 0);
-  const trashFound = Object.entries(state.collection)
-    .filter(([id]) => itemTypes[id]?.kind === "trash")
-    .reduce((sum, [, count]) => sum + count, 0);
+  const treasureTotal = state.digSpots.filter((spot) => itemTypes[spot.item]?.kind === "treasure").length;
+  const trashTotal = state.digSpots.filter((spot) => itemTypes[spot.item]?.kind === "trash").length;
+  const treasureFound = state.digSpots.filter((spot) => spot.found && itemTypes[spot.item]?.kind === "treasure").length;
+  const trashFound = state.digSpots.filter((spot) => spot.found && itemTypes[spot.item]?.kind === "trash").length;
   const treasure = Object.entries(state.collection)
     .filter(([id, count]) => count > 0 && itemTypes[id]?.kind === "treasure")
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
@@ -257,8 +269,8 @@ function updateHud() {
   hudElements.collectionCount.textContent = found;
   hudElements.gemCount.textContent = treasureFound;
   hudElements.missionHoles.textContent = `(${Math.min(found, total)}/${total})`;
-  hudElements.missionTreasure.textContent = `(${Math.min(treasureFound, 3)}/3)`;
-  hudElements.missionTrash.textContent = `(${Math.min(trashFound, 3)}/3)`;
+  hudElements.missionTreasure.textContent = `(${Math.min(treasureFound, treasureTotal)}/${treasureTotal})`;
+  hudElements.missionTrash.textContent = `(${Math.min(trashFound, trashTotal)}/${trashTotal})`;
   hudElements.toolCollection.textContent = found;
   hudElements.toolBell.textContent = state.collection.bell || 0;
   hudElements.xpCount.textContent = `${state.playerLevel}/${nextGoal}`;
