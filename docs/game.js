@@ -65,7 +65,7 @@ const TREE_FADE_ALPHA = 0.42;
 const ITEM_REPEAT_COUNT = 3;
 const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "25";
+const ASSET_VERSION = "26";
 
 const stages = [
   {
@@ -829,15 +829,15 @@ function drawProp(item) {
   const width = item.w;
   const height = (image.height / image.width) * width;
   ctx.save();
-  if (treeCoversCat(item, width, height)) {
+  if (foregroundCoversCat(item, width, height)) {
     ctx.globalAlpha = TREE_FADE_ALPHA;
   }
   ctx.drawImage(image, item.x - width / 2, item.y - height, width, height);
   ctx.restore();
 }
 
-function treeCoversCat(item, width, height) {
-  if (!isTreeProp(item.prop)) return false;
+function foregroundCoversCat(item, width, height) {
+  if (!isForegroundOccluder(item.prop)) return false;
   const propBox = {
     left: item.x - width / 2 + width * 0.12,
     right: item.x + width / 2 - width * 0.12,
@@ -853,8 +853,8 @@ function treeCoversCat(item, width, height) {
   return rectsOverlap(propBox, catBox);
 }
 
-function isTreeProp(prop) {
-  return prop === "broadleaf_tree" || prop === "deep_forest_tree";
+function isForegroundOccluder(prop) {
+  return prop === "broadleaf_tree" || prop === "deep_forest_tree" || prop === "cave_rock_reef";
 }
 
 function rectsOverlap(a, b) {

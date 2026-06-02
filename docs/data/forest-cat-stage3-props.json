@@ -13,35 +13,18 @@
     "actors"
   ],
   "props": {
-    "sunlit_stalagmite": "assets/props/sunlit_stalagmite.png",
     "cave_crystal_cluster": "assets/props/cave_crystal_cluster.png",
     "cave_fern": "assets/props/cave_fern.png",
-    "sunlit_boulder": "assets/props/sunlit_boulder.png",
-    "cave_hanging_vines": "assets/props/cave_hanging_vines.png"
+    "cave_hanging_vines": "assets/props/cave_hanging_vines.png",
+    "cave_rock_reef": "assets/props/cave_rock_reef.png"
   },
   "placements": [
     {
-      "id": "s3_stalagmite_nw",
-      "prop": "sunlit_stalagmite",
-      "x": 188,
-      "y": 160,
-      "w": 116,
-      "layer": "y_sorted"
-    },
-    {
-      "id": "s3_stalagmite_ne",
-      "prop": "sunlit_stalagmite",
-      "x": 824,
-      "y": 186,
-      "w": 132,
-      "layer": "y_sorted"
-    },
-    {
-      "id": "s3_stalagmite_s",
-      "prop": "sunlit_stalagmite",
-      "x": 574,
-      "y": 670,
-      "w": 126,
+      "id": "s3_rock_reef_east",
+      "prop": "cave_rock_reef",
+      "x": 772,
+      "y": 458,
+      "w": 330,
       "layer": "y_sorted"
     },
     {
@@ -50,30 +33,6 @@
       "x": 250,
       "y": 438,
       "w": 104,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_crystal_e",
-      "prop": "cave_crystal_cluster",
-      "x": 790,
-      "y": 466,
-      "w": 118,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_boulder_w",
-      "prop": "sunlit_boulder",
-      "x": 142,
-      "y": 560,
-      "w": 122,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_boulder_e",
-      "prop": "sunlit_boulder",
-      "x": 884,
-      "y": 320,
-      "w": 128,
       "layer": "ground_props"
     },
     {

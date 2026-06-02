@@ -48,28 +48,12 @@
   },
   "blockers": [
     {
-      "id": "s3_stalagmite_nw",
+      "id": "s3_rock_reef_east",
       "type": "ellipse",
-      "cx": 188,
-      "cy": 160,
-      "rx": 28,
-      "ry": 20
-    },
-    {
-      "id": "s3_stalagmite_ne",
-      "type": "ellipse",
-      "cx": 824,
-      "cy": 186,
-      "rx": 32,
-      "ry": 22
-    },
-    {
-      "id": "s3_stalagmite_s",
-      "type": "ellipse",
-      "cx": 574,
-      "cy": 670,
-      "rx": 31,
-      "ry": 22
+      "cx": 772,
+      "cy": 458,
+      "rx": 82,
+      "ry": 42
     },
     {
       "id": "s3_crystal_w",
@@ -78,30 +62,6 @@
       "cy": 438,
       "rx": 30,
       "ry": 20
-    },
-    {
-      "id": "s3_crystal_e",
-      "type": "ellipse",
-      "cx": 790,
-      "cy": 466,
-      "rx": 34,
-      "ry": 22
-    },
-    {
-      "id": "s3_boulder_w",
-      "type": "ellipse",
-      "cx": 142,
-      "cy": 560,
-      "rx": 42,
-      "ry": 25
-    },
-    {
-      "id": "s3_boulder_e",
-      "type": "ellipse",
-      "cx": 884,
-      "cy": 320,
-      "rx": 45,
-      "ry": 26
     }
   ]
 }
