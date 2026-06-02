@@ -65,7 +65,7 @@ const TREE_FADE_ALPHA = 0.42;
 const ITEM_REPEAT_COUNT = 3;
 const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "28";
+const ASSET_VERSION = "29";
 
 const stages = [
   {
