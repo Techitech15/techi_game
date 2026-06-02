@@ -555,6 +555,135 @@
         display: grid;
       }
 
+      .settings-modal {
+        position: absolute;
+        inset: 0;
+        z-index: 8;
+        display: none;
+        place-items: center;
+        padding: 20px;
+        background: rgba(12, 21, 8, 0.58);
+        pointer-events: auto;
+      }
+
+      .settings-modal.is-open {
+        display: grid;
+      }
+
+      .settings-panel {
+        width: min(88%, 390px);
+        display: grid;
+        gap: 16px;
+        padding: 18px;
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, rgba(255, 236, 178, 0.98), rgba(218, 153, 72, 0.98)),
+          repeating-linear-gradient(90deg, rgba(105, 56, 18, 0.13) 0 18px, rgba(255, 255, 255, 0.07) 18px 36px);
+        border: 4px solid #704018;
+        box-shadow:
+          inset 0 4px 0 rgba(255, 255, 255, 0.42),
+          inset 0 -7px 0 rgba(104, 51, 17, 0.25),
+          0 18px 36px rgba(0, 0, 0, 0.38);
+        color: #5a2d10;
+        text-shadow: 0 1px 0 rgba(255, 245, 205, 0.8);
+      }
+
+      .settings-head,
+      .settings-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .settings-heading {
+        margin: 0;
+        font-size: clamp(24px, 3.4vw, 34px);
+      }
+
+      .settings-close {
+        width: 42px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 3px solid #5b2e0c;
+        background: radial-gradient(circle at 35% 28%, #fff1bc, #b76620 68%, #5c2a09);
+        color: #3d1905;
+        font-size: 22px;
+        font-weight: 900;
+        box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.36), 0 4px 0 rgba(61, 30, 7, 0.55);
+        cursor: pointer;
+      }
+
+      .settings-row {
+        padding: 12px;
+        border-radius: 10px;
+        background: rgba(255, 236, 177, 0.72);
+        border: 2px solid rgba(136, 82, 25, 0.4);
+      }
+
+      .settings-label {
+        display: grid;
+        gap: 3px;
+        font-size: 18px;
+      }
+
+      .settings-note {
+        color: #7b4619;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .debug-switch {
+        position: relative;
+        display: inline-grid;
+        align-items: center;
+        width: 78px;
+        height: 38px;
+      }
+
+      .debug-switch input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .switch-track {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #7d3f13, #4d260b);
+        border: 3px solid #4a260b;
+        box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25);
+      }
+
+      .switch-track::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff4bd, #e5a139);
+        box-shadow: 0 2px 0 rgba(64, 31, 8, 0.58);
+        transition: transform 160ms ease;
+      }
+
+      .debug-switch input:checked + .switch-track {
+        background: linear-gradient(180deg, #9ee44f, #3d941c);
+      }
+
+      .debug-switch input:checked + .switch-track::after {
+        transform: translateX(38px);
+      }
+
+      .debug-state {
+        justify-self: end;
+        min-width: 34px;
+        color: #3f7f1e;
+        font-size: 14px;
+      }
+
       .stage-panel {
         width: min(88%, 690px);
         max-height: min(82%, 620px);
@@ -712,7 +841,7 @@
         .top-counters {
           right: 8px;
           top: 8px;
-          grid-template-columns: repeat(3, auto);
+          grid-template-columns: repeat(3, auto) 34px;
           gap: 4px;
         }
 
@@ -728,7 +857,12 @@
         }
 
         .round-button {
-          display: none;
+          display: inline-grid;
+          place-items: center;
+          width: 34px;
+          height: 34px;
+          border-width: 2px;
+          font-size: 18px;
         }
 
         .life-bar {
@@ -866,6 +1000,22 @@
           min-height: 126px;
           padding: 10px;
         }
+
+        .settings-modal {
+          padding: 10px;
+        }
+
+        .settings-panel {
+          width: min(92%, 360px);
+          padding: 13px;
+          gap: 11px;
+          border-width: 3px;
+        }
+
+        .settings-close {
+          width: 36px;
+          font-size: 19px;
+        }
       }
 
       @media (max-width: 760px) and (orientation: portrait) {
@@ -895,6 +1045,7 @@
         .top-counters {
           right: 4px;
           top: 4px;
+          grid-template-columns: repeat(3, auto) 24px;
           gap: 2px;
         }
 
@@ -913,7 +1064,7 @@
 
         .top-progress {
           left: 108px;
-          right: 122px;
+          right: 148px;
           top: 4px;
           width: auto;
           padding: 3px 5px;
@@ -937,6 +1088,13 @@
 
         .life-bar {
           display: none;
+        }
+
+        .round-button {
+          width: 24px;
+          height: 24px;
+          border-width: 2px;
+          font-size: 13px;
         }
 
         .mission-panel {
@@ -1149,6 +1307,62 @@
           border-radius: 8px;
         }
 
+        .settings-modal {
+          padding: 8px;
+        }
+
+        .settings-panel {
+          width: min(92%, 320px);
+          max-height: calc(100% - 16px);
+          padding: 10px;
+          gap: 8px;
+          border-width: 2px;
+          overflow: auto;
+        }
+
+        .settings-heading {
+          font-size: 21px;
+        }
+
+        .settings-close {
+          width: 30px;
+          border-width: 2px;
+          font-size: 16px;
+        }
+
+        .settings-row {
+          padding: 8px;
+          border-width: 2px;
+        }
+
+        .settings-label {
+          font-size: 14px;
+        }
+
+        .settings-note {
+          font-size: 10px;
+        }
+
+        .debug-switch {
+          width: 62px;
+          height: 32px;
+        }
+
+        .switch-track {
+          border-width: 2px;
+        }
+
+        .switch-track::after {
+          width: 22px;
+          height: 22px;
+          left: 3px;
+          top: 3px;
+        }
+
+        .debug-switch input:checked + .switch-track::after {
+          transform: translateX(30px);
+        }
+
         .stage-number,
         .stage-requirement {
           font-size: 10px;
@@ -1177,7 +1391,7 @@
           <div class="counter"><span class="counter-icon">🪙</span><span id="coin-count">1,250</span></div>
           <div class="counter"><span class="counter-icon">🧺</span><span id="collection-count">0</span></div>
           <div class="counter"><span class="counter-icon">💎</span><span id="gem-count">0</span></div>
-          <button class="round-button" type="button" aria-label="設定">⚙</button>
+          <button class="round-button" id="settings-button" type="button" aria-label="設定">⚙</button>
         </div>
         <div class="life-bar" aria-label="ライフ">
           <span class="heart">❤</span>
@@ -1220,6 +1434,24 @@
           <div class="bag-items" id="bag-items"></div>
         </div>
       </div>
+      <div class="settings-modal" id="settings-modal" aria-hidden="true">
+        <section class="settings-panel" role="dialog" aria-modal="true" aria-label="設定">
+          <div class="settings-head">
+            <h1 class="settings-heading">設定</h1>
+            <button class="settings-close" id="settings-close" type="button" aria-label="閉じる">×</button>
+          </div>
+          <div class="settings-row">
+            <div class="settings-label">
+              <span>デバッグモード <span class="debug-state" id="debug-state">OFF</span></span>
+              <span class="settings-note">ステージ解放条件を無視して移動できます</span>
+            </div>
+            <label class="debug-switch" aria-label="デバッグモード">
+              <input id="debug-toggle" type="checkbox" />
+              <span class="switch-track"></span>
+            </label>
+          </div>
+        </section>
+      </div>
       <div class="stage-modal is-open" id="stage-menu" aria-hidden="false">
         <section class="stage-panel" role="dialog" aria-modal="true" aria-label="ステージ選択">
           <div class="stage-head">
@@ -1234,6 +1466,6 @@
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=22"></script>
+    <script src="game.js?v=23"></script>
   </body>
 </html>

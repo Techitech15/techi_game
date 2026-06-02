@@ -17,6 +17,11 @@ const hudElements = {
   digButton: document.querySelector("#dig-button"),
   bagButton: document.querySelector("#bag-button"),
   stageButton: document.querySelector("#stage-button"),
+  settingsButton: document.querySelector("#settings-button"),
+  settingsModal: document.querySelector("#settings-modal"),
+  settingsClose: document.querySelector("#settings-close"),
+  debugToggle: document.querySelector("#debug-toggle"),
+  debugState: document.querySelector("#debug-state"),
   bagModal: document.querySelector("#bag-modal"),
   bagClose: document.querySelector("#bag-close"),
   bagItems: document.querySelector("#bag-items"),
@@ -50,7 +55,7 @@ const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
 const MAX_LEVEL = 10;
-const ASSET_VERSION = "22";
+const ASSET_VERSION = "23";
 
 const stages = [
   {
@@ -88,6 +93,8 @@ const state = {
   ready: false,
   loadingStage: false,
   stageMenuOpen: true,
+  settingsOpen: false,
+  debugMode: false,
   currentStage: null,
   playerLevel: 0,
   cat: { x: 512, y: 405, speed: 125, facing: 1, frame: 0, frameTime: 0 },
@@ -290,7 +297,7 @@ function renderBagItems() {
 }
 
 function isStageUnlocked(stage) {
-  return state.playerLevel >= stage.unlockLevel;
+  return state.debugMode || state.playerLevel >= stage.unlockLevel;
 }
 
 function renderStageMenu() {
@@ -299,7 +306,8 @@ function renderStageMenu() {
     .map((stage) => {
       const unlocked = isStageUnlocked(stage);
       const selected = state.currentStage?.id === stage.id;
-      const requirement = unlocked ? (selected ? "プレイ中" : stage.description) : `Lv.${stage.unlockLevel}で解放`;
+      const debugUnlocked = state.debugMode && state.playerLevel < stage.unlockLevel;
+      const requirement = selected ? "プレイ中" : debugUnlocked ? "デバッグ解放" : unlocked ? stage.description : `Lv.${stage.unlockLevel}で解放`;
       return `
         <button
           class="stage-card"
@@ -325,6 +333,7 @@ function setStageMenuOpen(open) {
   frameEl.classList.toggle("is-stage-menu-open", open);
   if (open) {
     setBagOpen(false);
+    setSettingsOpen(false);
     renderStageMenu();
   }
 }
@@ -1001,6 +1010,27 @@ function setBagOpen(open) {
   if (open) renderBagItems();
 }
 
+function setSettingsOpen(open) {
+  state.settingsOpen = open;
+  hudElements.settingsModal.classList.toggle("is-open", open);
+  hudElements.settingsModal.setAttribute("aria-hidden", String(!open));
+  if (open) {
+    setBagOpen(false);
+    renderSettings();
+  }
+}
+
+function renderSettings() {
+  hudElements.debugToggle.checked = state.debugMode;
+  hudElements.debugState.textContent = state.debugMode ? "ON" : "OFF";
+}
+
+function setDebugMode(enabled) {
+  state.debugMode = enabled;
+  renderSettings();
+  renderStageMenu();
+}
+
 hudElements.bagButton.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   event.stopPropagation();
@@ -1014,6 +1044,35 @@ hudElements.stageButton.addEventListener("pointerdown", (event) => {
   event.stopPropagation();
   unlockAudio();
   setStageMenuOpen(true);
+});
+
+hudElements.settingsButton.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  unlockAudio();
+  setSettingsOpen(true);
+});
+
+hudElements.settingsClose.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  setSettingsOpen(false);
+});
+
+hudElements.settingsClose.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  setSettingsOpen(false);
+});
+
+hudElements.settingsModal.addEventListener("pointerdown", (event) => {
+  if (event.target !== hudElements.settingsModal) return;
+  event.preventDefault();
+  setSettingsOpen(false);
+});
+
+hudElements.debugToggle.addEventListener("change", (event) => {
+  setDebugMode(event.target.checked);
 });
 
 hudElements.stageClose.addEventListener("pointerdown", (event) => {
@@ -1055,6 +1114,7 @@ hudElements.bagModal.addEventListener("pointerdown", (event) => {
 addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     setBagOpen(false);
+    setSettingsOpen(false);
   }
 });
 
