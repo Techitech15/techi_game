@@ -1,0 +1,1 @@
+2x3 clean hand-painted collectible sprite sheet for a sunlit cave stage: sun shard, clear crystal, ancient coin, bat-shaped button, broken lamp, strange bone. Transparent runtime sheet matching the existing map style.

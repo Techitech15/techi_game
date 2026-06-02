@@ -1,0 +1,107 @@
+{
+  "map": "forest-cat-stage3",
+  "size": {
+    "width": 1024,
+    "height": 768
+  },
+  "actor_radius": 18,
+  "walkmesh": {
+    "type": "polygon",
+    "points": [
+      [
+        118,
+        148
+      ],
+      [
+        472,
+        104
+      ],
+      [
+        852,
+        150
+      ],
+      [
+        934,
+        286
+      ],
+      [
+        850,
+        636
+      ],
+      [
+        650,
+        700
+      ],
+      [
+        190,
+        662
+      ],
+      [
+        86,
+        560
+      ],
+      [
+        82,
+        260
+      ]
+    ]
+  },
+  "blockers": [
+    {
+      "id": "s3_stalagmite_nw",
+      "type": "ellipse",
+      "cx": 188,
+      "cy": 160,
+      "rx": 28,
+      "ry": 20
+    },
+    {
+      "id": "s3_stalagmite_ne",
+      "type": "ellipse",
+      "cx": 824,
+      "cy": 186,
+      "rx": 32,
+      "ry": 22
+    },
+    {
+      "id": "s3_stalagmite_s",
+      "type": "ellipse",
+      "cx": 574,
+      "cy": 670,
+      "rx": 31,
+      "ry": 22
+    },
+    {
+      "id": "s3_crystal_w",
+      "type": "ellipse",
+      "cx": 250,
+      "cy": 438,
+      "rx": 30,
+      "ry": 20
+    },
+    {
+      "id": "s3_crystal_e",
+      "type": "ellipse",
+      "cx": 790,
+      "cy": 466,
+      "rx": 34,
+      "ry": 22
+    },
+    {
+      "id": "s3_boulder_w",
+      "type": "ellipse",
+      "cx": 142,
+      "cy": 560,
+      "rx": 42,
+      "ry": 25
+    },
+    {
+      "id": "s3_boulder_e",
+      "type": "ellipse",
+      "cx": 884,
+      "cy": 320,
+      "rx": 45,
+      "ry": 26
+    }
+  ]
+}

@@ -49,6 +49,14 @@ const itemCatalogs = {
     blackFeather: { name: "黒い羽根", kind: "trash", sprite: 4 },
     rustyKey: { name: "錆びた鍵", kind: "trash", sprite: 5 },
   },
+  stage3: {
+    sunShard: { name: "陽だまりの欠片", kind: "treasure", sprite: 0 },
+    clearCrystal: { name: "透き通った結晶", kind: "treasure", sprite: 1 },
+    ancientCoin: { name: "古代の硬貨", kind: "treasure", sprite: 2 },
+    batButton: { name: "コウモリのボタン", kind: "trash", sprite: 3 },
+    brokenLamp: { name: "壊れたランタン", kind: "trash", sprite: 4 },
+    strangeBone: { name: "ふしぎな骨", kind: "trash", sprite: 5 },
+  },
 };
 const allItemIds = [...new Set(Object.values(itemCatalogs).flatMap((catalog) => Object.keys(catalog)))];
 const PATH_GRID = 32;
@@ -56,8 +64,8 @@ const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
 const ITEM_REPEAT_COUNT = 3;
 const DIG_SPOT_MIN_DISTANCE = 78;
-const MAX_LEVEL = 10;
-const ASSET_VERSION = "24";
+const MAX_LEVEL = 15;
+const ASSET_VERSION = "25";
 
 const stages = [
   {
@@ -86,6 +94,20 @@ const stages = [
       props: "data/forest-cat-stage2-props.json",
       collision: "data/forest-cat-stage2-collision.json",
       hooks: "data/forest-cat-stage2-scene-hooks.json",
+    },
+  },
+  {
+    id: "stage3",
+    number: "ステージ3",
+    name: "日差しの差し込む洞窟",
+    description: "Lv.11で解放",
+    unlockLevel: 11,
+    image: "assets/map/forest-cat-stage3-layered-preview.png",
+    itemSheet: "assets/items/stage3-collectibles-sheet.png",
+    files: {
+      props: "data/forest-cat-stage3-props.json",
+      collision: "data/forest-cat-stage3-collision.json",
+      hooks: "data/forest-cat-stage3-scene-hooks.json",
     },
   },
 ];
@@ -259,8 +281,8 @@ function updateHud() {
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
     .join(" / ");
   const stageName = state.currentStage ? state.currentStage.name : "ステージ";
-  const nextGoal = state.playerLevel < 6 ? 6 : MAX_LEVEL;
-  const progressBase = state.playerLevel < 6 ? 0 : 6;
+  const nextGoal = state.playerLevel < 6 ? 6 : state.playerLevel < 11 ? 11 : MAX_LEVEL;
+  const progressBase = state.playerLevel < 6 ? 0 : state.playerLevel < 11 ? 6 : 11;
   const progressRange = Math.max(1, nextGoal - progressBase);
   const progress = Math.min(100, ((state.playerLevel - progressBase) / progressRange) * 100);
   statusEl.textContent = `${stageName} コレクション ${found}/${total}${treasure ? ` | 宝: ${treasure}` : ""}${trash ? ` | ごみ: ${trash}` : ""}`;

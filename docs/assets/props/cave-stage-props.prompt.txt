@@ -1,0 +1,1 @@
+Transparent hand-painted cave props matching the existing top-down RPG map style: sunlit stalagmite, teal crystal cluster, small cave fern, warm-lit boulder, hanging vines. Separate runtime props with alpha.
