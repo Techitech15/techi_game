@@ -1,7 +1,9 @@
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
 const statusEl = document.querySelector("#status");
+const frameEl = document.querySelector(".frame");
 const hudElements = {
+  levelLabel: document.querySelector("#level-label"),
   coinCount: document.querySelector("#coin-count"),
   collectionCount: document.querySelector("#collection-count"),
   gemCount: document.querySelector("#gem-count"),
@@ -14,9 +16,13 @@ const hudElements = {
   xpFill: document.querySelector("#xp-fill"),
   digButton: document.querySelector("#dig-button"),
   bagButton: document.querySelector("#bag-button"),
+  stageButton: document.querySelector("#stage-button"),
   bagModal: document.querySelector("#bag-modal"),
   bagClose: document.querySelector("#bag-close"),
   bagItems: document.querySelector("#bag-items"),
+  stageMenu: document.querySelector("#stage-menu"),
+  stageList: document.querySelector("#stage-list"),
+  stageClose: document.querySelector("#stage-close"),
   missionPanel: document.querySelector(".mission-panel"),
   missionTitle: document.querySelector(".mission-title"),
 };
@@ -33,16 +39,51 @@ const buriedItemIds = Object.keys(itemTypes);
 const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
+const MAX_LEVEL = 10;
+
+const stages = [
+  {
+    id: "stage1",
+    number: "ステージ1",
+    name: "森の入口",
+    description: "Lv.0から",
+    unlockLevel: 0,
+    image: "assets/map/forest-cat-layered-preview.png",
+    files: {
+      props: "data/forest-cat-props.json",
+      collision: "data/forest-cat-collision.json",
+      hooks: "data/forest-cat-scene-hooks.json",
+    },
+  },
+  {
+    id: "stage2",
+    number: "ステージ2",
+    name: "森の奥地",
+    description: "Lv.6で解放",
+    unlockLevel: 6,
+    image: "assets/map/forest-cat-stage2-layered-preview.png",
+    files: {
+      props: "data/forest-cat-stage2-props.json",
+      collision: "data/forest-cat-stage2-collision.json",
+      hooks: "data/forest-cat-stage2-scene-hooks.json",
+    },
+  },
+];
 
 const keys = new Set();
 const state = {
   ready: false,
+  loadingStage: false,
+  stageMenuOpen: true,
+  currentStage: null,
+  playerLevel: 0,
   cat: { x: 512, y: 405, speed: 125, facing: 1, frame: 0, frameTime: 0 },
   destination: null,
   path: [],
   pendingDigSpot: null,
   digSpots: [],
-  collection: {},
+  stageRecords: {},
+  collection: Object.fromEntries(buriedItemIds.map((id) => [id, 0])),
   notice: "",
   noticeTimer: 0,
   digTimer: 0,
@@ -66,42 +107,72 @@ function loadImage(path) {
 }
 
 async function boot() {
-  const [props, collision, hooks] = await Promise.all([
-    fetch(asset("data/forest-cat-props.json")).then((res) => res.json()),
-    fetch(asset("data/forest-cat-collision.json")).then((res) => res.json()),
-    fetch(asset("data/forest-cat-scene-hooks.json")).then((res) => res.json()),
-  ]);
-
-  state.collision = collision;
-  state.hooks = hooks;
-  state.cat.x = hooks.player_spawn.x;
-  state.cat.y = hooks.player_spawn.y;
-
-  const base = await loadImage(props.base);
-  state.images.set("base", base);
-
-  await Promise.all(
-    Object.entries(props.props).map(async ([id, path]) => {
-      state.images.set(id, await loadImage(path));
-    }),
-  );
   state.images.set("cat", await loadImage("assets/cat/munchkin-walk-sheet.png"));
   state.images.set("catDig", await loadImage("assets/cat/munchkin-dig-sheet.png"));
   state.images.set("items", await loadImage("assets/items/collectibles-sheet.png"));
-  state.props = props.placements;
-  initDigSpots();
-  state.ready = true;
-  updateHud();
+  await loadStage("stage1");
+  setStageMenuOpen(true);
   requestAnimationFrame(tick);
 }
 
+async function loadStage(stageId) {
+  const stage = stages.find((item) => item.id === stageId);
+  if (!stage || state.loadingStage) return;
+  state.loadingStage = true;
+  try {
+    state.ready = false;
+    state.destination = null;
+    state.path = [];
+    state.pendingDigSpot = null;
+    state.digTimer = 0;
+    state.digCompleteSpot = null;
+
+    const [props, collision, hooks] = await Promise.all([
+      fetch(asset(stage.files.props)).then((res) => res.json()),
+      fetch(asset(stage.files.collision)).then((res) => res.json()),
+      fetch(asset(stage.files.hooks)).then((res) => res.json()),
+    ]);
+
+    state.currentStage = stage;
+    state.collision = collision;
+    state.hooks = hooks;
+    state.cat.x = hooks.player_spawn.x;
+    state.cat.y = hooks.player_spawn.y;
+    state.cat.facing = 1;
+    state.cat.frame = 0;
+    state.cat.frameTime = 0;
+
+    state.images.set("base", await loadImage(props.base));
+
+    await Promise.all(
+      Object.entries(props.props).map(async ([id, path]) => {
+        if (!state.images.has(id)) {
+          state.images.set(id, await loadImage(path));
+        }
+      }),
+    );
+    state.props = props.placements;
+    initDigSpots();
+    state.ready = true;
+    updateHud();
+    renderStageMenu();
+  } finally {
+    state.loadingStage = false;
+  }
+}
+
 function initDigSpots() {
-  state.collection = Object.fromEntries(buriedItemIds.map((id) => [id, 0]));
+  if (state.stageRecords[state.currentStage.id]) {
+    state.digSpots = state.stageRecords[state.currentStage.id].digSpots;
+    return;
+  }
+
   state.digSpots = [];
   for (const item of buriedItemIds) {
     const position = randomDigSpotPosition(state.digSpots);
-    state.digSpots.push({ id: `buried_${item}`, x: position.x, y: position.y, item, found: false });
+    state.digSpots.push({ id: `${state.currentStage.id}_buried_${item}`, x: position.x, y: position.y, item, found: false });
   }
+  state.stageRecords[state.currentStage.id] = { digSpots: state.digSpots };
 }
 
 function randomDigSpotPosition(existingSpots) {
@@ -142,7 +213,13 @@ function updateHud() {
     .filter(([id, count]) => count > 0 && itemTypes[id].kind === "trash")
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
     .join(" / ");
-  statusEl.textContent = `コレクション ${found}/${total}${treasure ? ` | 宝: ${treasure}` : ""}${trash ? ` | ごみ: ${trash}` : ""}`;
+  const stageName = state.currentStage ? state.currentStage.name : "ステージ";
+  const nextGoal = state.playerLevel < 6 ? 6 : MAX_LEVEL;
+  const progressBase = state.playerLevel < 6 ? 0 : 6;
+  const progressRange = Math.max(1, nextGoal - progressBase);
+  const progress = Math.min(100, ((state.playerLevel - progressBase) / progressRange) * 100);
+  statusEl.textContent = `${stageName} コレクション ${found}/${total}${treasure ? ` | 宝: ${treasure}` : ""}${trash ? ` | ごみ: ${trash}` : ""}`;
+  hudElements.levelLabel.textContent = `Lv. ${state.playerLevel}`;
   hudElements.coinCount.textContent = (1250 + treasureFound * 125).toLocaleString("ja-JP");
   hudElements.collectionCount.textContent = found;
   hudElements.gemCount.textContent = treasureFound;
@@ -151,9 +228,10 @@ function updateHud() {
   hudElements.missionTrash.textContent = `(${Math.min(trashFound, 3)}/3)`;
   hudElements.toolCollection.textContent = found;
   hudElements.toolBell.textContent = state.collection.bell || 0;
-  hudElements.xpCount.textContent = `${found}/${total}`;
-  hudElements.xpFill.style.width = `${Math.min(100, (found / total) * 100)}%`;
+  hudElements.xpCount.textContent = `${state.playerLevel}/${nextGoal}`;
+  hudElements.xpFill.style.width = `${progress}%`;
   renderBagItems();
+  renderStageMenu();
 }
 
 function renderBagItems() {
@@ -179,6 +257,56 @@ function renderBagItems() {
       `;
     })
     .join("");
+}
+
+function isStageUnlocked(stage) {
+  return state.playerLevel >= stage.unlockLevel;
+}
+
+function renderStageMenu() {
+  if (!hudElements.stageList) return;
+  hudElements.stageList.innerHTML = stages
+    .map((stage) => {
+      const unlocked = isStageUnlocked(stage);
+      const selected = state.currentStage?.id === stage.id;
+      const requirement = unlocked ? (selected ? "プレイ中" : stage.description) : `Lv.${stage.unlockLevel}で解放`;
+      return `
+        <button
+          class="stage-card"
+          type="button"
+          data-stage-id="${stage.id}"
+          style="--stage-image: url('${stage.image}')"
+          ${unlocked ? "" : "disabled"}
+          aria-label="${stage.number} ${stage.name}"
+        >
+          <span class="stage-number">${stage.number}</span>
+          <span class="stage-name">${stage.name}</span>
+          <span class="stage-requirement">${requirement}</span>
+        </button>
+      `;
+    })
+    .join("");
+}
+
+function setStageMenuOpen(open) {
+  state.stageMenuOpen = open;
+  hudElements.stageMenu.classList.toggle("is-open", open);
+  hudElements.stageMenu.setAttribute("aria-hidden", String(!open));
+  frameEl.classList.toggle("is-stage-menu-open", open);
+  if (open) {
+    setBagOpen(false);
+    renderStageMenu();
+  }
+}
+
+async function chooseStage(stageId) {
+  const stage = stages.find((item) => item.id === stageId);
+  if (!stage || !isStageUnlocked(stage)) return;
+  unlockAudio();
+  setStageMenuOpen(false);
+  if (state.currentStage?.id !== stage.id) {
+    await loadStage(stage.id);
+  }
 }
 
 function pointInPolygon(point, polygon) {
@@ -500,7 +628,7 @@ function playTrashDiscoverySound(audio, now) {
 }
 
 function tryDig() {
-  if (state.digTimer > 0) return false;
+  if (state.stageMenuOpen || state.digTimer > 0) return false;
   const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 58);
   if (!spot) {
     setNotice("ここには何もなさそう");
@@ -526,13 +654,20 @@ function collectDugSpot() {
   spot.found = true;
   state.collection[spot.item] += 1;
   const item = itemTypes[spot.item];
-  setNotice(`${item.kind === "trash" ? "ごみ発見" : "宝発見"}: ${item.name}`);
+  const previousLevel = state.playerLevel;
+  state.playerLevel = Math.min(MAX_LEVEL, state.playerLevel + 1);
+  if (previousLevel < 6 && state.playerLevel >= 6) {
+    setNotice("ステージ2が開放されました！");
+  } else {
+    setNotice(`${item.kind === "trash" ? "ごみ発見" : "宝発見"}: ${item.name}`);
+  }
   playDiscoverySound(item.kind);
   updateHud();
   state.digCompleteSpot = null;
 }
 
 function update(dt) {
+  if (state.stageMenuOpen) return;
   state.noticeTimer = Math.max(0, state.noticeTimer - dt);
   const wasDigging = state.digTimer > 0;
   state.digTimer = Math.max(0, state.digTimer - dt);
@@ -763,16 +898,24 @@ function render() {
 
 let last = 0;
 function tick(now) {
-  if (!state.ready) return;
-  const dt = Math.min(0.033, (now - last) / 1000 || 0);
-  last = now;
-  update(dt);
-  render();
+  if (state.ready) {
+    const dt = Math.min(0.033, (now - last) / 1000 || 0);
+    last = now;
+    update(dt);
+    render();
+  }
   requestAnimationFrame(tick);
 }
 
 addEventListener("keydown", (event) => {
   unlockAudio();
+  if (state.stageMenuOpen) {
+    if (event.key === "Escape") setStageMenuOpen(false);
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) {
+      event.preventDefault();
+    }
+    return;
+  }
   keys.add(event.key.toLowerCase());
   if (event.key === " ") {
     event.preventDefault();
@@ -827,8 +970,34 @@ function setBagOpen(open) {
 hudElements.bagButton.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   event.stopPropagation();
+  if (state.stageMenuOpen) return;
   unlockAudio();
   setBagOpen(true);
+});
+
+hudElements.stageButton.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  unlockAudio();
+  setStageMenuOpen(true);
+});
+
+hudElements.stageClose.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  setStageMenuOpen(false);
+});
+
+hudElements.stageList.addEventListener("pointerdown", (event) => {
+  const button = event.target.closest("[data-stage-id]");
+  if (!button || button.disabled) return;
+  event.preventDefault();
+  event.stopPropagation();
+  chooseStage(button.dataset.stageId).catch((error) => {
+    console.error(error);
+    statusEl.textContent = "Failed to load stage assets.";
+    setStageMenuOpen(true);
+  });
 });
 
 hudElements.bagClose.addEventListener("pointerdown", (event) => {
@@ -858,12 +1027,14 @@ addEventListener("keydown", (event) => {
 hudElements.digButton.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   event.stopPropagation();
+  if (state.stageMenuOpen) return;
   unlockAudio();
   tryDig();
 });
 
 canvas.addEventListener("pointerdown", (event) => {
   event.preventDefault();
+  if (state.stageMenuOpen) return;
   unlockAudio();
   canvas.setPointerCapture?.(event.pointerId);
   setDestinationFromClientPoint(event.clientX, event.clientY);
@@ -872,6 +1043,7 @@ canvas.addEventListener("pointerdown", (event) => {
 canvas.addEventListener("pointermove", (event) => {
   if (event.buttons !== 1 && event.pointerType !== "touch") return;
   event.preventDefault();
+  if (state.stageMenuOpen) return;
   setDestinationFromClientPoint(event.clientX, event.clientY);
 });
 

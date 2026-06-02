@@ -6,11 +6,30 @@
   "collision_model": "polygon_walkmesh + object blockers",
   "engine_target": "raw_canvas / project-native JSON",
   "cat_sprite_source": "assets/cat/munchkin-walk-sheet.png",
-  "files": {
-    "base": "assets/map/forest-cat-base.png",
-    "preview": "assets/map/forest-cat-layered-preview.png",
-    "props": "data/forest-cat-props.json",
-    "collision": "data/forest-cat-collision.json",
-    "scene_hooks": "data/forest-cat-scene-hooks.json"
-  }
+  "stages": [
+    {
+      "id": "stage1",
+      "name": "森の入口",
+      "unlock_level": 0,
+      "files": {
+        "base": "assets/map/forest-cat-base.png",
+        "preview": "assets/map/forest-cat-layered-preview.png",
+        "props": "data/forest-cat-props.json",
+        "collision": "data/forest-cat-collision.json",
+        "scene_hooks": "data/forest-cat-scene-hooks.json"
+      }
+    },
+    {
+      "id": "stage2",
+      "name": "森の奥地",
+      "unlock_level": 6,
+      "files": {
+        "base": "assets/map/forest-cat-stage2-base.png",
+        "preview": "assets/map/forest-cat-stage2-layered-preview.png",
+        "props": "data/forest-cat-stage2-props.json",
+        "collision": "data/forest-cat-stage2-collision.json",
+        "scene_hooks": "data/forest-cat-stage2-scene-hooks.json"
+      }
+    }
+  ]
 }

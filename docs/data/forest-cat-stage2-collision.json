@@ -1,0 +1,132 @@
+{
+  "map": "forest-cat-stage2",
+  "size": {
+    "width": 1024,
+    "height": 768
+  },
+  "actor_radius": 18,
+  "walkmesh": {
+    "type": "polygon",
+    "points": [
+      [
+        96,
+        118
+      ],
+      [
+        920,
+        116
+      ],
+      [
+        960,
+        288
+      ],
+      [
+        888,
+        680
+      ],
+      [
+        150,
+        690
+      ],
+      [
+        68,
+        536
+      ],
+      [
+        74,
+        232
+      ]
+    ]
+  },
+  "blockers": [
+    {
+      "id": "s2_tree_nw_01",
+      "type": "circle",
+      "cx": 108,
+      "cy": 132,
+      "r": 40
+    },
+    {
+      "id": "s2_tree_ne_01",
+      "type": "circle",
+      "cx": 910,
+      "cy": 150,
+      "r": 42
+    },
+    {
+      "id": "s2_tree_w_01",
+      "type": "circle",
+      "cx": 98,
+      "cy": 425,
+      "r": 34
+    },
+    {
+      "id": "s2_tree_e_01",
+      "type": "circle",
+      "cx": 930,
+      "cy": 455,
+      "r": 36
+    },
+    {
+      "id": "s2_tree_sw_01",
+      "type": "circle",
+      "cx": 220,
+      "cy": 704,
+      "r": 38
+    },
+    {
+      "id": "s2_tree_se_01",
+      "type": "circle",
+      "cx": 740,
+      "cy": 694,
+      "r": 38
+    },
+    {
+      "id": "s2_tree_mid_01",
+      "type": "circle",
+      "cx": 528,
+      "cy": 192,
+      "r": 30
+    },
+    {
+      "id": "s2_bush_01",
+      "type": "ellipse",
+      "cx": 292,
+      "cy": 248,
+      "rx": 38,
+      "ry": 22
+    },
+    {
+      "id": "s2_bush_02",
+      "type": "ellipse",
+      "cx": 646,
+      "cy": 340,
+      "rx": 39,
+      "ry": 23
+    },
+    {
+      "id": "s2_rock_01",
+      "type": "ellipse",
+      "cx": 420,
+      "cy": 520,
+      "rx": 32,
+      "ry": 21
+    },
+    {
+      "id": "s2_rock_02",
+      "type": "ellipse",
+      "cx": 785,
+      "cy": 528,
+      "rx": 31,
+      "ry": 20
+    },
+    {
+      "id": "s2_stump_01",
+      "type": "ellipse",
+      "cx": 312,
+      "cy": 612,
+      "rx": 30,
+      "ry": 22
+    }
+  ]
+}

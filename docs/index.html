@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Forest Cat Map</title>
+    <title>テチの穴掘り</title>
     <style>
       html,
       body {
@@ -538,6 +538,150 @@
         font-weight: 900;
       }
 
+      .stage-modal {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        display: none;
+        place-items: center;
+        padding: 26px;
+        background:
+          radial-gradient(circle at 50% 42%, rgba(55, 91, 32, 0.42), rgba(8, 18, 8, 0.86)),
+          rgba(8, 18, 8, 0.64);
+        pointer-events: auto;
+      }
+
+      .stage-modal.is-open {
+        display: grid;
+      }
+
+      .stage-panel {
+        width: min(88%, 690px);
+        max-height: min(82%, 620px);
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, rgba(255, 236, 178, 0.98), rgba(218, 153, 72, 0.98)),
+          repeating-linear-gradient(90deg, rgba(105, 56, 18, 0.13) 0 18px, rgba(255, 255, 255, 0.07) 18px 36px);
+        border: 4px solid #704018;
+        box-shadow:
+          inset 0 4px 0 rgba(255, 255, 255, 0.42),
+          inset 0 -7px 0 rgba(104, 51, 17, 0.25),
+          0 18px 36px rgba(0, 0, 0, 0.38);
+        color: #5a2d10;
+        text-shadow: 0 1px 0 rgba(255, 245, 205, 0.8);
+      }
+
+      .stage-head {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: start;
+      }
+
+      .stage-heading {
+        margin: 0;
+        font-size: clamp(26px, 4vw, 42px);
+        line-height: 1.05;
+      }
+
+      .stage-subtitle {
+        margin: 5px 0 0;
+        font-size: clamp(13px, 1.9vw, 17px);
+        color: #6f3c14;
+      }
+
+      .stage-close {
+        width: 44px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 3px solid #5b2e0c;
+        background: radial-gradient(circle at 35% 28%, #fff1bc, #b76620 68%, #5c2a09);
+        color: #3d1905;
+        font-size: 24px;
+        font-weight: 900;
+        box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.36), 0 4px 0 rgba(61, 30, 7, 0.55);
+        cursor: pointer;
+      }
+
+      .stage-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .stage-card {
+        position: relative;
+        min-height: 156px;
+        display: grid;
+        align-content: end;
+        gap: 6px;
+        padding: 15px;
+        overflow: hidden;
+        border: 3px solid #6d3d14;
+        border-radius: 12px;
+        background: #24431f;
+        color: #fff3c6;
+        text-align: left;
+        text-shadow: 0 2px 0 rgba(36, 17, 5, 0.9);
+        box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.2), 0 5px 0 rgba(70, 35, 9, 0.55);
+        cursor: pointer;
+      }
+
+      .stage-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image: var(--stage-image);
+        background-size: cover;
+        background-position: center;
+        transform: scale(1.02);
+      }
+
+      .stage-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(180deg, rgba(20, 42, 18, 0.05), rgba(23, 16, 7, 0.78));
+      }
+
+      .stage-card > * {
+        position: relative;
+        z-index: 2;
+      }
+
+      .stage-card:disabled {
+        filter: grayscale(0.8);
+        cursor: not-allowed;
+      }
+
+      .stage-card:disabled::after {
+        background: rgba(18, 18, 18, 0.74);
+      }
+
+      .stage-number {
+        width: fit-content;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: rgba(96, 49, 14, 0.82);
+        border: 2px solid rgba(255, 229, 151, 0.62);
+        font-size: 13px;
+      }
+
+      .stage-name {
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: 900;
+      }
+
+      .stage-requirement {
+        color: #ffe6a1;
+        font-size: 13px;
+      }
+
       @media (max-width: 760px) {
         body {
           padding: 0;
@@ -697,6 +841,30 @@
 
         .bag-item-count {
           font-size: 13px;
+        }
+
+        .stage-modal {
+          padding: 10px;
+        }
+
+        .stage-panel {
+          width: min(94%, 520px);
+          padding: 13px;
+          gap: 11px;
+        }
+
+        .stage-close {
+          width: 36px;
+          font-size: 19px;
+        }
+
+        .stage-list {
+          gap: 8px;
+        }
+
+        .stage-card {
+          min-height: 126px;
+          padding: 10px;
         }
       }
 
@@ -941,6 +1109,54 @@
           padding: 7px 9px;
           font-size: 10px;
         }
+
+        .stage-modal {
+          padding: 8px;
+          align-items: center;
+        }
+
+        .stage-panel {
+          width: min(92%, 360px);
+          max-height: calc(100% - 16px);
+          padding: 10px;
+          gap: 8px;
+          border-width: 2px;
+          overflow: auto;
+        }
+
+        .stage-heading {
+          font-size: 21px;
+        }
+
+        .stage-subtitle {
+          font-size: 10px;
+        }
+
+        .stage-close {
+          width: 30px;
+          border-width: 2px;
+          font-size: 16px;
+        }
+
+        .stage-list {
+          grid-template-columns: 1fr;
+        }
+
+        .stage-card {
+          min-height: 92px;
+          padding: 8px;
+          border-width: 2px;
+          border-radius: 8px;
+        }
+
+        .stage-number,
+        .stage-requirement {
+          font-size: 10px;
+        }
+
+        .stage-name {
+          font-size: 17px;
+        }
       }
     </style>
   </head>
@@ -953,7 +1169,7 @@
       <div class="hud" aria-hidden="false">
         <div class="hud-title wood">テチの穴掘り</div>
         <div class="top-progress" aria-label="レベル">
-          <div class="level">Lv. 3</div>
+          <div class="level" id="level-label">Lv. 0</div>
           <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
           <div class="xp-count" id="xp-count">0/6</div>
         </div>
@@ -994,7 +1210,7 @@
         <button class="dig-button" id="dig-button" type="button">🐾 掘る 🐾</button>
         <div class="side-actions">
           <button class="small-action" id="bag-button" type="button" aria-label="バッグ"><span class="small-icon">🎒</span><span>バッグ</span></button>
-          <button class="small-action" type="button" aria-label="マップ"><span class="small-icon">🗺</span><span>マップ</span></button>
+          <button class="small-action" id="stage-button" type="button" aria-label="ステージ"><span class="small-icon">🗺</span><span>ステージ</span></button>
         </div>
       </div>
       <div class="bag-modal" id="bag-modal" aria-hidden="true">
@@ -1004,8 +1220,20 @@
           <div class="bag-items" id="bag-items"></div>
         </div>
       </div>
+      <div class="stage-modal is-open" id="stage-menu" aria-hidden="false">
+        <section class="stage-panel" role="dialog" aria-modal="true" aria-label="ステージ選択">
+          <div class="stage-head">
+            <div>
+              <h1 class="stage-heading">ステージ選択</h1>
+              <p class="stage-subtitle">Lv.0-5はステージ1、Lv.6-10はステージ2まで解放</p>
+            </div>
+            <button class="stage-close" id="stage-close" type="button" aria-label="閉じる">×</button>
+          </div>
+          <div class="stage-list" id="stage-list"></div>
+        </section>
+      </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=18"></script>
+    <script src="game.js?v=19"></script>
   </body>
 </html>
