@@ -3,7 +3,7 @@
   "player_spawn": {
     "id": "cat_spawn_stage2",
     "x": 500,
-    "y": 438,
+    "y": 433,
     "facing": "down"
   },
   "camera_bounds": {
