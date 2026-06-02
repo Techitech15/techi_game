@@ -50,7 +50,7 @@ const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
 const MAX_LEVEL = 10;
-const ASSET_VERSION = "21";
+const ASSET_VERSION = "22";
 
 const stages = [
   {
@@ -794,7 +794,7 @@ function drawProp(item) {
 }
 
 function treeCoversCat(item, width, height) {
-  if (!["broadleaf_tree", "deep_forest_tree"].includes(item.prop) || item.y <= state.cat.y - 4) return false;
+  if (!isTreeProp(item.prop)) return false;
   const propBox = {
     left: item.x - width / 2 + width * 0.12,
     right: item.x + width / 2 - width * 0.12,
@@ -808,6 +808,10 @@ function treeCoversCat(item, width, height) {
     bottom: state.cat.y - 4,
   };
   return rectsOverlap(propBox, catBox);
+}
+
+function isTreeProp(prop) {
+  return prop === "broadleaf_tree" || prop === "deep_forest_tree";
 }
 
 function rectsOverlap(a, b) {
