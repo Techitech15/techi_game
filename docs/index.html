@@ -74,12 +74,12 @@
 
       .hud-title {
         position: absolute;
-        left: 20px;
-        top: 18px;
-        min-width: 270px;
-        padding: 13px 26px 15px;
-        border-radius: 18px 10px 22px 10px;
-        font-size: clamp(22px, 3.2vw, 36px);
+        left: 14px;
+        top: 12px;
+        min-width: 205px;
+        padding: 8px 18px 10px;
+        border-radius: 14px 8px 17px 8px;
+        font-size: clamp(18px, 2.3vw, 28px);
         letter-spacing: 0;
       }
 
@@ -99,29 +99,29 @@
       .top-progress {
         position: absolute;
         left: 50%;
-        top: 18px;
+        top: 12px;
         transform: translateX(-50%);
-        width: min(32%, 380px);
-        min-width: 250px;
+        width: min(28%, 320px);
+        min-width: 210px;
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-items: center;
-        gap: 10px;
-        padding: 10px 14px;
-        border-radius: 18px;
+        gap: 7px;
+        padding: 7px 10px;
+        border-radius: 14px;
         background: linear-gradient(180deg, #b56c25, #75400f);
-        border: 3px solid #4f2a0c;
+        border: 2px solid #4f2a0c;
         box-shadow: inset 0 3px 0 rgba(255, 208, 95, 0.42), 0 4px 12px rgba(26, 19, 5, 0.32);
         color: #fff1c4;
         text-shadow: 0 2px 0 #3a1a08;
       }
 
       .level {
-        font-size: clamp(18px, 2.3vw, 26px);
+        font-size: clamp(15px, 1.8vw, 21px);
       }
 
       .xp-track {
-        height: 22px;
+        height: 16px;
         border-radius: 999px;
         background: #4a260b;
         border: 2px solid #d39a42;
@@ -137,19 +137,19 @@
       }
 
       .xp-count {
-        min-width: 68px;
+        min-width: 54px;
         text-align: right;
-        font-size: clamp(14px, 1.9vw, 20px);
+        font-size: clamp(12px, 1.4vw, 16px);
       }
 
       .top-counters {
         position: absolute;
-        right: 18px;
-        top: 16px;
+        right: 12px;
+        top: 12px;
         display: grid;
-        grid-template-columns: repeat(3, auto) 46px;
+        grid-template-columns: repeat(3, auto) 38px;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
       }
 
       .counter,
@@ -163,14 +163,14 @@
       .counter {
         display: flex;
         align-items: center;
-        gap: 7px;
-        min-width: 80px;
-        padding: 8px 12px;
+        gap: 5px;
+        min-width: 64px;
+        padding: 5px 9px;
         border-radius: 999px;
         background: linear-gradient(180deg, #a76424, #63330d);
-        border: 3px solid #4b270b;
+        border: 2px solid #4b270b;
         color: #fff1cc;
-        font-size: clamp(15px, 2vw, 22px);
+        font-size: clamp(13px, 1.5vw, 18px);
         text-shadow: 0 2px 0 #321707;
         box-shadow: inset 0 2px 0 rgba(255, 220, 121, 0.36), 0 4px 11px rgba(24, 16, 4, 0.3);
       }
@@ -180,8 +180,8 @@
       .small-icon {
         display: inline-grid;
         place-items: center;
-        width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         background: radial-gradient(circle at 35% 30%, #fff5a5, #e68c18 62%, #8b4309);
         color: #69300a;
@@ -189,26 +189,26 @@
       }
 
       .round-button {
-        width: 46px;
-        height: 46px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
-        border: 3px solid #4a260b;
+        border: 2px solid #4a260b;
         background: radial-gradient(circle at 35% 28%, #f8dda0, #9a5b1d 68%, #4c2609);
         color: #371604;
-        font-size: 25px;
+        font-size: 21px;
         box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.32), 0 4px 10px rgba(23, 15, 4, 0.34);
       }
 
       .life-bar {
         position: absolute;
-        right: 18px;
-        top: 76px;
+        right: 12px;
+        top: 58px;
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-items: center;
-        gap: 9px;
-        min-width: 210px;
-        padding: 7px 10px;
+        gap: 7px;
+        min-width: 170px;
+        padding: 5px 8px;
         border-radius: 999px;
         background: linear-gradient(180deg, #a86626, #6d380e);
         border: 3px solid #4b270b;
@@ -217,11 +217,11 @@
       }
 
       .heart {
-        font-size: 30px;
+        font-size: 23px;
       }
 
       .heart-track {
-        height: 24px;
+        height: 18px;
         border-radius: 999px;
         background: #6c1c13;
         border: 2px solid #ffb58f;
@@ -234,42 +234,48 @@
       }
 
       .heart-count {
-        font-size: 21px;
+        font-size: 17px;
       }
 
       .mission-panel {
         position: absolute;
-        left: 20px;
-        top: 152px;
-        width: min(270px, 29%);
-        padding: 0 16px 17px;
-        border-radius: 14px;
+        left: 14px;
+        top: 116px;
+        width: min(220px, 24%);
+        padding: 0 12px 12px;
+        border-radius: 11px;
       }
 
       .mission-title {
         position: relative;
-        margin: -17px auto 12px;
+        margin: -13px auto 9px;
         width: fit-content;
-        padding: 8px 22px;
-        border-radius: 12px;
+        padding: 6px 16px;
+        border-radius: 10px;
         background: linear-gradient(180deg, #7db72f, #3f7f1e);
-        border: 3px solid #315d13;
+        border: 2px solid #315d13;
         color: #fff3bb;
-        font-size: clamp(18px, 2.2vw, 26px);
+        font-size: clamp(14px, 1.6vw, 20px);
         text-shadow: 0 2px 0 #21420d;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+
+      .mission-title::after {
+        content: " -";
       }
 
       .mission-list {
         display: grid;
-        gap: 10px;
+        gap: 7px;
       }
 
       .mission {
         display: grid;
-        grid-template-columns: 35px 1fr;
-        gap: 8px;
+        grid-template-columns: 28px 1fr;
+        gap: 6px;
         align-items: center;
-        padding-bottom: 10px;
+        padding-bottom: 7px;
         border-bottom: 2px dashed rgba(133, 77, 25, 0.36);
       }
 
@@ -279,14 +285,14 @@
       }
 
       .mission-icon {
-        font-size: 28px;
+        font-size: 22px;
         text-align: center;
       }
 
       .mission-text {
         display: grid;
         gap: 3px;
-        font-size: clamp(13px, 1.7vw, 17px);
+        font-size: clamp(11px, 1.2vw, 14px);
       }
 
       .mission-count {
@@ -295,53 +301,53 @@
 
       .bottom-tray {
         position: absolute;
-        left: 18px;
-        bottom: 16px;
+        left: 12px;
+        bottom: 10px;
         display: flex;
-        gap: 9px;
-        padding: 10px;
-        border-radius: 12px;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 10px;
       }
 
       .tool-slot {
         position: relative;
-        width: clamp(50px, 6.8vw, 68px);
+        width: clamp(40px, 5vw, 54px);
         aspect-ratio: 1;
-        border-radius: 12px;
-        border: 3px solid #8c4d16;
+        border-radius: 10px;
+        border: 2px solid #8c4d16;
         background: linear-gradient(180deg, #fff0bb, #e7b463);
         box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.54), 0 3px 0 #68350f;
-        font-size: clamp(26px, 4vw, 42px);
+        font-size: clamp(22px, 3vw, 32px);
       }
 
       .tool-count {
         position: absolute;
         right: -5px;
         bottom: -5px;
-        min-width: 24px;
-        height: 24px;
+        min-width: 20px;
+        height: 20px;
         display: grid;
         place-items: center;
         border-radius: 999px;
         background: #5b2c0d;
         border: 2px solid #fff1bd;
         color: white;
-        font-size: 15px;
+        font-size: 12px;
         text-shadow: 0 1px 0 black;
       }
 
       .dig-button {
         position: absolute;
         left: 50%;
-        bottom: 18px;
+        bottom: 12px;
         transform: translateX(-50%);
-        min-width: min(260px, 31%);
-        padding: 16px 34px 18px;
-        border-radius: 24px;
-        border: 4px solid #a75b13;
+        min-width: min(200px, 24%);
+        padding: 10px 24px 12px;
+        border-radius: 18px;
+        border: 3px solid #a75b13;
         background: linear-gradient(180deg, #ffe482, #f3a722 70%, #c77512);
         color: #74330a;
-        font-size: clamp(30px, 5vw, 50px);
+        font-size: clamp(24px, 3.5vw, 36px);
         font-weight: 900;
         text-shadow: 0 2px 0 rgba(255, 244, 184, 0.9);
         box-shadow:
@@ -363,21 +369,21 @@
 
       .side-actions {
         position: absolute;
-        right: 22px;
-        bottom: 18px;
+        right: 14px;
+        bottom: 12px;
         display: flex;
-        gap: 14px;
+        gap: 10px;
       }
 
       .small-action {
-        width: clamp(64px, 8.4vw, 88px);
+        width: clamp(52px, 6.4vw, 68px);
         display: grid;
         justify-items: center;
         gap: 2px;
-        padding: 9px 6px 7px;
-        border-radius: 18px;
+        padding: 6px 4px 5px;
+        border-radius: 14px;
         background: linear-gradient(180deg, #bd762e, #6a350c);
-        border: 3px solid #4d2609;
+        border: 2px solid #4d2609;
         color: #fff1c5;
         font-weight: 900;
         text-shadow: 0 2px 0 #321707;
@@ -385,9 +391,26 @@
       }
 
       .small-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 29px;
+        width: 34px;
+        height: 34px;
+        font-size: 23px;
+      }
+
+      .mission-panel.is-mission-collapsed {
+        width: auto;
+        padding: 0 7px 4px;
+      }
+
+      .mission-panel.is-mission-collapsed .mission-title {
+        margin: -8px auto 0;
+      }
+
+      .mission-panel.is-mission-collapsed .mission-title::after {
+        content: " +";
+      }
+
+      .mission-panel.is-mission-collapsed .mission-list {
+        display: none;
       }
 
       .title-splash {
@@ -1466,6 +1489,6 @@
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=26"></script>
+    <script src="game.js?v=27"></script>
   </body>
 </html>

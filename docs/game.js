@@ -65,7 +65,7 @@ const TREE_FADE_ALPHA = 0.42;
 const ITEM_REPEAT_COUNT = 3;
 const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "26";
+const ASSET_VERSION = "27";
 
 const stages = [
   {
@@ -1026,14 +1026,13 @@ if (compactMissionQuery.addEventListener) {
 }
 
 hudElements.missionTitle.addEventListener("pointerdown", (event) => {
-  if (!compactMissionQuery.matches) return;
   event.preventDefault();
   event.stopPropagation();
   setMissionCollapsed(!hudElements.missionPanel.classList.contains("is-mission-collapsed"));
 });
 
 hudElements.missionTitle.addEventListener("keydown", (event) => {
-  if (!compactMissionQuery.matches || !["Enter", " "].includes(event.key)) return;
+  if (!["Enter", " "].includes(event.key)) return;
   event.preventDefault();
   setMissionCollapsed(!hudElements.missionPanel.classList.contains("is-mission-collapsed"));
 });
