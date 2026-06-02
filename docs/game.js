@@ -50,6 +50,7 @@ const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
 const MAX_LEVEL = 10;
+const ASSET_VERSION = "21";
 
 const stages = [
   {
@@ -107,7 +108,11 @@ const state = {
   images: new Map(),
 };
 
-const asset = (path) => new URL(path, location.href).href;
+function asset(path) {
+  const url = new URL(path, location.href);
+  url.searchParams.set("v", ASSET_VERSION);
+  return url.href;
+}
 
 function loadImage(path) {
   return new Promise((resolve, reject) => {
@@ -300,7 +305,7 @@ function renderStageMenu() {
           class="stage-card"
           type="button"
           data-stage-id="${stage.id}"
-          style="--stage-image: url('${stage.image}')"
+          style="--stage-image: url('${asset(stage.image)}')"
           ${unlocked ? "" : "disabled"}
           aria-label="${stage.number} ${stage.name}"
         >
@@ -789,7 +794,7 @@ function drawProp(item) {
 }
 
 function treeCoversCat(item, width, height) {
-  if (item.prop !== "broadleaf_tree" || item.y <= state.cat.y - 4) return false;
+  if (!["broadleaf_tree", "deep_forest_tree"].includes(item.prop) || item.y <= state.cat.y - 4) return false;
   const propBox = {
     left: item.x - width / 2 + width * 0.12,
     right: item.x + width / 2 - width * 0.12,
