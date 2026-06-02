@@ -23,49 +23,97 @@
     {
       "id": "s2_tree_nw_01",
       "prop": "broadleaf_tree",
-      "x": 108,
-      "y": 132,
-      "w": 245,
+      "x": 72,
+      "y": 118,
+      "w": 300,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_nw_02",
+      "prop": "broadleaf_tree",
+      "x": 235,
+      "y": 92,
+      "w": 250,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_n_01",
+      "prop": "broadleaf_tree",
+      "x": 430,
+      "y": 88,
+      "w": 238,
       "layer": "y_sorted"
     },
     {
       "id": "s2_tree_ne_01",
       "prop": "broadleaf_tree",
-      "x": 910,
-      "y": 150,
-      "w": 250,
+      "x": 802,
+      "y": 112,
+      "w": 270,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_ne_02",
+      "prop": "broadleaf_tree",
+      "x": 955,
+      "y": 180,
+      "w": 270,
       "layer": "y_sorted"
     },
     {
       "id": "s2_tree_w_01",
       "prop": "broadleaf_tree",
-      "x": 98,
-      "y": 425,
-      "w": 210,
+      "x": 74,
+      "y": 384,
+      "w": 265,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_w_02",
+      "prop": "broadleaf_tree",
+      "x": 172,
+      "y": 540,
+      "w": 245,
       "layer": "y_sorted"
     },
     {
       "id": "s2_tree_e_01",
       "prop": "broadleaf_tree",
       "x": 930,
-      "y": 455,
-      "w": 220,
+      "y": 392,
+      "w": 270,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_e_02",
+      "prop": "broadleaf_tree",
+      "x": 842,
+      "y": 568,
+      "w": 245,
       "layer": "y_sorted"
     },
     {
       "id": "s2_tree_sw_01",
       "prop": "broadleaf_tree",
-      "x": 220,
-      "y": 704,
-      "w": 240,
+      "x": 235,
+      "y": 724,
+      "w": 265,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_s_01",
+      "prop": "broadleaf_tree",
+      "x": 520,
+      "y": 708,
+      "w": 255,
       "layer": "y_sorted"
     },
     {
       "id": "s2_tree_se_01",
       "prop": "broadleaf_tree",
-      "x": 740,
-      "y": 694,
-      "w": 238,
+      "x": 744,
+      "y": 726,
+      "w": 265,
       "layer": "y_sorted"
     },
     {
@@ -73,7 +121,23 @@
       "prop": "broadleaf_tree",
       "x": 528,
       "y": 192,
-      "w": 180,
+      "w": 205,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_mid_02",
+      "prop": "broadleaf_tree",
+      "x": 360,
+      "y": 315,
+      "w": 175,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "s2_tree_mid_03",
+      "prop": "broadleaf_tree",
+      "x": 675,
+      "y": 370,
+      "w": 170,
       "layer": "y_sorted"
     },
     {
@@ -81,7 +145,7 @@
       "prop": "leafy_bush",
       "x": 292,
       "y": 248,
-      "w": 94,
+      "w": 104,
       "layer": "ground_props"
     },
     {
@@ -89,7 +153,15 @@
       "prop": "leafy_bush",
       "x": 646,
       "y": 340,
-      "w": 96,
+      "w": 108,
+      "layer": "ground_props"
+    },
+    {
+      "id": "s2_bush_03",
+      "prop": "leafy_bush",
+      "x": 454,
+      "y": 455,
+      "w": 92,
       "layer": "ground_props"
     },
     {

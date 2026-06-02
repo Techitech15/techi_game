@@ -14,6 +14,7 @@
       "files": {
         "base": "assets/map/forest-cat-base.png",
         "preview": "assets/map/forest-cat-layered-preview.png",
+        "items": "assets/items/collectibles-sheet.png",
         "props": "data/forest-cat-props.json",
         "collision": "data/forest-cat-collision.json",
         "scene_hooks": "data/forest-cat-scene-hooks.json"
@@ -26,6 +27,7 @@
       "files": {
         "base": "assets/map/forest-cat-stage2-base.png",
         "preview": "assets/map/forest-cat-stage2-layered-preview.png",
+        "items": "assets/items/stage2-collectibles-sheet.png",
         "props": "data/forest-cat-stage2-props.json",
         "collision": "data/forest-cat-stage2-collision.json",
         "scene_hooks": "data/forest-cat-stage2-scene-hooks.json"

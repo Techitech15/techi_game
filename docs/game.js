@@ -27,15 +27,25 @@ const hudElements = {
   missionTitle: document.querySelector(".mission-title"),
 };
 
-const itemTypes = {
-  amber: { name: "琥珀", kind: "treasure", sprite: 0 },
-  bell: { name: "小さな鈴", kind: "treasure", sprite: 1 },
-  ribbon: { name: "ピンクのリボン", kind: "treasure", sprite: 2 },
-  bottlecap: { name: "王冠キャップ", kind: "trash", sprite: 3 },
-  wrapper: { name: "キャンディの包み紙", kind: "trash", sprite: 4 },
-  twig: { name: "へんな小枝", kind: "trash", sprite: 5 },
+const itemCatalogs = {
+  stage1: {
+    amber: { name: "琥珀", kind: "treasure", sprite: 0 },
+    bell: { name: "小さな鈴", kind: "treasure", sprite: 1 },
+    ribbon: { name: "ピンクのリボン", kind: "treasure", sprite: 2 },
+    bottlecap: { name: "王冠キャップ", kind: "trash", sprite: 3 },
+    wrapper: { name: "キャンディの包み紙", kind: "trash", sprite: 4 },
+    twig: { name: "へんな小枝", kind: "trash", sprite: 5 },
+  },
+  stage2: {
+    moonstone: { name: "月光石", kind: "treasure", sprite: 0 },
+    oldCollar: { name: "古い首輪", kind: "treasure", sprite: 1 },
+    blueMushroom: { name: "夜光きのこ", kind: "treasure", sprite: 2 },
+    crackedMask: { name: "ひび割れた小面", kind: "trash", sprite: 3 },
+    blackFeather: { name: "黒い羽根", kind: "trash", sprite: 4 },
+    rustyKey: { name: "錆びた鍵", kind: "trash", sprite: 5 },
+  },
 };
-const buriedItemIds = Object.keys(itemTypes);
+const allItemIds = [...new Set(Object.values(itemCatalogs).flatMap((catalog) => Object.keys(catalog)))];
 const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
@@ -49,6 +59,7 @@ const stages = [
     description: "Lv.0から",
     unlockLevel: 0,
     image: "assets/map/forest-cat-layered-preview.png",
+    itemSheet: "assets/items/collectibles-sheet.png",
     files: {
       props: "data/forest-cat-props.json",
       collision: "data/forest-cat-collision.json",
@@ -62,6 +73,7 @@ const stages = [
     description: "Lv.6で解放",
     unlockLevel: 6,
     image: "assets/map/forest-cat-stage2-layered-preview.png",
+    itemSheet: "assets/items/stage2-collectibles-sheet.png",
     files: {
       props: "data/forest-cat-stage2-props.json",
       collision: "data/forest-cat-stage2-collision.json",
@@ -83,7 +95,7 @@ const state = {
   pendingDigSpot: null,
   digSpots: [],
   stageRecords: {},
-  collection: Object.fromEntries(buriedItemIds.map((id) => [id, 0])),
+  collection: Object.fromEntries(allItemIds.map((id) => [id, 0])),
   notice: "",
   noticeTimer: 0,
   digTimer: 0,
@@ -109,7 +121,6 @@ function loadImage(path) {
 async function boot() {
   state.images.set("cat", await loadImage("assets/cat/munchkin-walk-sheet.png"));
   state.images.set("catDig", await loadImage("assets/cat/munchkin-dig-sheet.png"));
-  state.images.set("items", await loadImage("assets/items/collectibles-sheet.png"));
   await loadStage("stage1");
   setStageMenuOpen(true);
   requestAnimationFrame(tick);
@@ -143,6 +154,7 @@ async function loadStage(stageId) {
     state.cat.frameTime = 0;
 
     state.images.set("base", await loadImage(props.base));
+    state.images.set("items", await loadImage(stage.itemSheet));
 
     await Promise.all(
       Object.entries(props.props).map(async ([id, path]) => {
@@ -168,11 +180,19 @@ function initDigSpots() {
   }
 
   state.digSpots = [];
-  for (const item of buriedItemIds) {
+  for (const item of currentBuriedItemIds()) {
     const position = randomDigSpotPosition(state.digSpots);
     state.digSpots.push({ id: `${state.currentStage.id}_buried_${item}`, x: position.x, y: position.y, item, found: false });
   }
   state.stageRecords[state.currentStage.id] = { digSpots: state.digSpots };
+}
+
+function currentItemTypes() {
+  return itemCatalogs[state.currentStage?.id] || itemCatalogs.stage1;
+}
+
+function currentBuriedItemIds() {
+  return Object.keys(currentItemTypes());
 }
 
 function randomDigSpotPosition(existingSpots) {
@@ -197,20 +217,21 @@ function randomDigSpotPosition(existingSpots) {
 }
 
 function updateHud() {
+  const itemTypes = currentItemTypes();
   const found = state.digSpots.filter((spot) => spot.found).length;
   const total = state.digSpots.length;
   const treasureFound = Object.entries(state.collection)
-    .filter(([id]) => itemTypes[id].kind === "treasure")
+    .filter(([id]) => itemTypes[id]?.kind === "treasure")
     .reduce((sum, [, count]) => sum + count, 0);
   const trashFound = Object.entries(state.collection)
-    .filter(([id]) => itemTypes[id].kind === "trash")
+    .filter(([id]) => itemTypes[id]?.kind === "trash")
     .reduce((sum, [, count]) => sum + count, 0);
   const treasure = Object.entries(state.collection)
-    .filter(([id, count]) => count > 0 && itemTypes[id].kind === "treasure")
+    .filter(([id, count]) => count > 0 && itemTypes[id]?.kind === "treasure")
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
     .join(" / ");
   const trash = Object.entries(state.collection)
-    .filter(([id, count]) => count > 0 && itemTypes[id].kind === "trash")
+    .filter(([id, count]) => count > 0 && itemTypes[id]?.kind === "trash")
     .map(([id, count]) => `${itemTypes[id].name} x${count}`)
     .join(" / ");
   const stageName = state.currentStage ? state.currentStage.name : "ステージ";
@@ -235,7 +256,11 @@ function updateHud() {
 }
 
 function renderBagItems() {
-  const collected = Object.entries(state.collection).filter(([, count]) => count > 0);
+  const itemTypes = currentItemTypes();
+  const itemSheet = asset(state.currentStage?.itemSheet || stages[0].itemSheet);
+  const collected = Object.keys(itemTypes)
+    .map((id) => [id, state.collection[id] || 0])
+    .filter(([, count]) => count > 0);
   if (collected.length === 0) {
     hudElements.bagItems.innerHTML = `<div class="bag-empty">まだ何も見つけていません</div>`;
     return;
@@ -248,7 +273,7 @@ function renderBagItems() {
       const y = Math.floor(item.sprite / 3) * 100;
       return `
         <div class="bag-item">
-          <span class="bag-item-icon" style="background-position: ${x}% ${y}%"></span>
+          <span class="bag-item-icon" style="background-image: url('${itemSheet}'); background-position: ${x}% ${y}%"></span>
           <span>
             <span class="bag-item-name">${item.name}</span>
             <span class="bag-item-count">x${count}</span>
@@ -653,7 +678,7 @@ function collectDugSpot() {
   if (!spot || spot.found) return;
   spot.found = true;
   state.collection[spot.item] += 1;
-  const item = itemTypes[spot.item];
+  const item = currentItemTypes()[spot.item];
   const previousLevel = state.playerLevel;
   state.playerLevel = Math.min(MAX_LEVEL, state.playerLevel + 1);
   if (previousLevel < 6 && state.playerLevel >= 6) {
@@ -842,7 +867,7 @@ function drawDigSpot(spot) {
 
 function drawCollectibleIcon(itemId, x, y, size) {
   const image = state.images.get("items");
-  const item = itemTypes[itemId];
+  const item = currentItemTypes()[itemId];
   if (!image || !item) return;
   const cellSize = image.width / 3;
   const sx = (item.sprite % 3) * cellSize;

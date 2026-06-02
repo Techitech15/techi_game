@@ -1,0 +1,1 @@
+2x3 clean hand-painted collectible sprite sheet for a dense deep forest stage: moonstone, old collar, blue mushroom, cracked mask, black feather, rusty key. Transparent runtime sheet matching the existing map style; some items feel subtly ominous.
