@@ -1,1 +1,1 @@
-3x6 clean hand-painted transparent collectible sprite sheet for the sunlit cave stage. 18 item types total: 9 treasures and 9 trash items. Runtime sheet uses 3 columns, 6 rows, 128px cells.
+generate2dsprite pipeline. 2dsprite image_gen raw collectible prop art was chroma-keyed and remixed into a sunlit cave transparent 3 columns, 6 rows, 128px cell sheet. 18 item types total: 9 treasures and 9 trash items.
