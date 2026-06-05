@@ -1,1 +1,1 @@
-2x3 hand-painted collectible sprite sheet: amber, tiny bell, ribbon, bottle cap, candy wrapper, weird twig.
+3x6 clean hand-painted transparent collectible sprite sheet for the forest entrance stage. 18 item types total: 9 treasures and 9 trash items. Runtime sheet uses 3 columns, 6 rows, 128px cells.

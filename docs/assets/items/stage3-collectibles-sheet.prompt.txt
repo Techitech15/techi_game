@@ -1,1 +1,1 @@
-2x3 clean hand-painted collectible sprite sheet for a sunlit cave stage: sun shard, clear crystal, ancient coin, bat-shaped button, broken lamp, strange bone. Transparent runtime sheet matching the existing map style.
+3x6 clean hand-painted transparent collectible sprite sheet for the sunlit cave stage. 18 item types total: 9 treasures and 9 trash items. Runtime sheet uses 3 columns, 6 rows, 128px cells.

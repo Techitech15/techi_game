@@ -37,35 +37,72 @@ const itemCatalogs = {
     amber: { name: "琥珀", kind: "treasure", sprite: 0 },
     bell: { name: "小さな鈴", kind: "treasure", sprite: 1 },
     ribbon: { name: "ピンクのリボン", kind: "treasure", sprite: 2 },
-    bottlecap: { name: "王冠キャップ", kind: "trash", sprite: 3 },
-    wrapper: { name: "キャンディの包み紙", kind: "trash", sprite: 4 },
-    twig: { name: "へんな小枝", kind: "trash", sprite: 5 },
+    acorn: { name: "森のどんぐり", kind: "treasure", sprite: 3 },
+    shell: { name: "きれいな貝殻", kind: "treasure", sprite: 4 },
+    medal: { name: "古いメダル", kind: "treasure", sprite: 5 },
+    marble: { name: "青いビー玉", kind: "treasure", sprite: 6 },
+    goldenFeather: { name: "金色の羽根", kind: "treasure", sprite: 7 },
+    birdCharm: { name: "小鳥のチャーム", kind: "treasure", sprite: 8 },
+    bottlecap: { name: "王冠キャップ", kind: "trash", sprite: 9 },
+    wrapper: { name: "キャンディの包み紙", kind: "trash", sprite: 10 },
+    twig: { name: "へんな小枝", kind: "trash", sprite: 11 },
+    tornPaper: { name: "破れた紙切れ", kind: "trash", sprite: 12 },
+    emptyCan: { name: "空き缶", kind: "trash", sprite: 13 },
+    rustyScrew: { name: "さびたネジ", kind: "trash", sprite: 14 },
+    muddyCloth: { name: "泥だらけの布", kind: "trash", sprite: 15 },
+    crackedButton: { name: "割れたボタン", kind: "trash", sprite: 16 },
+    crumpledBag: { name: "くしゃくしゃ袋", kind: "trash", sprite: 17 },
   },
   stage2: {
     moonstone: { name: "月光石", kind: "treasure", sprite: 0 },
     oldCollar: { name: "古い首輪", kind: "treasure", sprite: 1 },
     blueMushroom: { name: "夜光きのこ", kind: "treasure", sprite: 2 },
-    crackedMask: { name: "ひび割れた小面", kind: "trash", sprite: 3 },
-    blackFeather: { name: "黒い羽根", kind: "trash", sprite: 4 },
-    rustyKey: { name: "錆びた鍵", kind: "trash", sprite: 5 },
+    greenVial: { name: "緑の小瓶", kind: "treasure", sprite: 3 },
+    forestCharm: { name: "森の護符", kind: "treasure", sprite: 4 },
+    silverBerry: { name: "銀色の実", kind: "treasure", sprite: 5 },
+    echoBell: { name: "こだまの鈴", kind: "treasure", sprite: 6 },
+    mistCrystal: { name: "霧の結晶", kind: "treasure", sprite: 7 },
+    oldRing: { name: "古びた指輪", kind: "treasure", sprite: 8 },
+    crackedMask: { name: "ひび割れた小面", kind: "trash", sprite: 9 },
+    blackFeather: { name: "黒い羽根", kind: "trash", sprite: 10 },
+    rustyKey: { name: "錆びた鍵", kind: "trash", sprite: 11 },
+    wiltedBouquet: { name: "しおれた花束", kind: "trash", sprite: 12 },
+    dirtyBandage: { name: "汚れた包帯", kind: "trash", sprite: 13 },
+    chippedGear: { name: "欠けた歯車", kind: "trash", sprite: 14 },
+    sootyTag: { name: "すすけた札", kind: "trash", sprite: 15 },
+    bentNail: { name: "曲がった釘", kind: "trash", sprite: 16 },
+    slimyStone: { name: "ぬめる石", kind: "trash", sprite: 17 },
   },
   stage3: {
     sunShard: { name: "陽だまりの欠片", kind: "treasure", sprite: 0 },
     clearCrystal: { name: "透き通った結晶", kind: "treasure", sprite: 1 },
     ancientCoin: { name: "古代の硬貨", kind: "treasure", sprite: 2 },
-    batButton: { name: "コウモリのボタン", kind: "trash", sprite: 3 },
-    brokenLamp: { name: "壊れたランタン", kind: "trash", sprite: 4 },
-    strangeBone: { name: "ふしぎな骨", kind: "trash", sprite: 5 },
+    glowingStalactite: { name: "光る鍾乳石片", kind: "treasure", sprite: 3 },
+    cavePearl: { name: "洞窟真珠", kind: "treasure", sprite: 4 },
+    goldenSand: { name: "金色の砂粒", kind: "treasure", sprite: 5 },
+    compassStone: { name: "古い方位石", kind: "treasure", sprite: 6 },
+    rainbowDrop: { name: "虹色の雫", kind: "treasure", sprite: 7 },
+    sunSigil: { name: "太陽紋の札", kind: "treasure", sprite: 8 },
+    batButton: { name: "コウモリのボタン", kind: "trash", sprite: 9 },
+    brokenLamp: { name: "壊れたランタン", kind: "trash", sprite: 10 },
+    strangeBone: { name: "ふしぎな骨", kind: "trash", sprite: 11 },
+    chippedPottery: { name: "欠けた陶片", kind: "trash", sprite: 12 },
+    sootyRope: { name: "すすけたロープ", kind: "trash", sprite: 13 },
+    dampPapers: { name: "湿った紙束", kind: "trash", sprite: 14 },
+    crackedLens: { name: "割れたレンズ", kind: "trash", sprite: 15 },
+    emptyBottle: { name: "からっぽの薬瓶", kind: "trash", sprite: 16 },
+    rustyClasp: { name: "さびた留め具", kind: "trash", sprite: 17 },
   },
 };
 const allItemIds = [...new Set(Object.values(itemCatalogs).flatMap((catalog) => Object.keys(catalog)))];
 const PATH_GRID = 32;
 const PATH_SAMPLE = 10;
 const TREE_FADE_ALPHA = 0.42;
-const ITEM_REPEAT_COUNT = 3;
+const ITEM_SHEET_COLUMNS = 3;
+const MAX_BURIED_ITEMS = 8;
 const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "29";
+const ASSET_VERSION = "30";
 
 const stages = [
   {
@@ -228,7 +265,25 @@ function currentItemTypes() {
 }
 
 function currentBuriedItemIds() {
-  return Object.keys(currentItemTypes()).flatMap((id) => Array.from({ length: ITEM_REPEAT_COUNT }, () => id));
+  const items = Object.entries(currentItemTypes());
+  const treasures = items.filter(([, item]) => item.kind === "treasure").map(([id]) => id);
+  const trash = items.filter(([, item]) => item.kind === "trash").map(([id]) => id);
+  const treasureCount = Math.min(treasures.length, Math.ceil(MAX_BURIED_ITEMS / 2));
+  const trashCount = Math.min(trash.length, MAX_BURIED_ITEMS - treasureCount);
+  return shuffle([...sampleItems(treasures, treasureCount), ...sampleItems(trash, trashCount)]);
+}
+
+function sampleItems(items, count) {
+  return shuffle(items).slice(0, count);
+}
+
+function shuffle(items) {
+  const shuffled = [...items];
+  for (let index = shuffled.length - 1; index > 0; index--) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
 }
 
 function randomDigSpotPosition(existingSpots) {
@@ -315,11 +370,12 @@ function renderBagItems() {
   hudElements.bagItems.innerHTML = collected
     .map(([id, count]) => {
       const item = itemTypes[id];
-      const x = (item.sprite % 3) * 50;
-      const y = Math.floor(item.sprite / 3) * 100;
+      const rows = itemSheetRows(itemTypes);
+      const x = spritePositionPercent(item.sprite % ITEM_SHEET_COLUMNS, ITEM_SHEET_COLUMNS);
+      const y = spritePositionPercent(Math.floor(item.sprite / ITEM_SHEET_COLUMNS), rows);
       return `
         <div class="bag-item">
-          <span class="bag-item-icon" style="background-image: url('${itemSheet}'); background-position: ${x}% ${y}%"></span>
+          <span class="bag-item-icon" style="background-image: url('${itemSheet}'); background-size: ${ITEM_SHEET_COLUMNS * 100}% ${rows * 100}%; background-position: ${x}% ${y}%"></span>
           <span>
             <span class="bag-item-name">${item.name}</span>
             <span class="bag-item-count">x${count}</span>
@@ -328,6 +384,14 @@ function renderBagItems() {
       `;
     })
     .join("");
+}
+
+function itemSheetRows(itemTypes) {
+  return Math.ceil(Object.keys(itemTypes).length / ITEM_SHEET_COLUMNS);
+}
+
+function spritePositionPercent(index, count) {
+  return count <= 1 ? 0 : (index / (count - 1)) * 100;
 }
 
 function isStageUnlocked(stage) {
@@ -921,9 +985,9 @@ function drawCollectibleIcon(itemId, x, y, size) {
   const image = state.images.get("items");
   const item = currentItemTypes()[itemId];
   if (!image || !item) return;
-  const cellSize = image.width / 3;
-  const sx = (item.sprite % 3) * cellSize;
-  const sy = Math.floor(item.sprite / 3) * cellSize;
+  const cellSize = image.width / ITEM_SHEET_COLUMNS;
+  const sx = (item.sprite % ITEM_SHEET_COLUMNS) * cellSize;
+  const sy = Math.floor(item.sprite / ITEM_SHEET_COLUMNS) * cellSize;
   ctx.drawImage(image, sx, sy, cellSize, cellSize, x, y, size, size);
 }
 
