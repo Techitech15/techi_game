@@ -106,7 +106,7 @@ const CAT_DRAW_HEIGHT = 156;
 const FOUND_ITEM_DRAW_WIDTH = 78;
 const FOUND_ITEM_DRAW_HEIGHT = 88;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "36";
+const ASSET_VERSION = "37";
 const portraitStageQuery = matchMedia("(max-width: 760px) and (orientation: portrait)");
 
 const stages = [
@@ -1063,15 +1063,15 @@ function drawCollectibleIcon(itemId, x, y, width, height = width) {
 function drawNotice() {
   if (!state.notice || state.noticeTimer <= 0) return;
   ctx.save();
-  ctx.font = "600 18px system-ui, sans-serif";
+  ctx.font = "700 28px system-ui, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   const x = canvas.width / 2;
-  const y = 56;
+  const y = 78;
   const metrics = ctx.measureText(state.notice);
-  const width = Math.min(canvas.width - 40, metrics.width + 34);
+  const width = Math.min(canvas.width - 48, metrics.width + 48);
   ctx.fillStyle = "rgba(25, 34, 20, 0.72)";
-  roundRect(x - width / 2, y - 20, width, 40, 8);
+  roundRect(x - width / 2, y - 30, width, 60, 12);
   ctx.fill();
   ctx.fillStyle = "#fff7d8";
   ctx.fillText(state.notice, x, y);
