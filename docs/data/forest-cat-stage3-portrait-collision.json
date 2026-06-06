@@ -2,66 +2,78 @@
   "map": "forest-cat-stage3-portrait",
   "size": {
     "width": 1024,
-    "height": 2216
+    "height": 1980
   },
-  "actor_radius": 18,
+  "actor_radius": 28,
   "walkmesh": {
     "type": "polygon",
     "points": [
       [
-        118,
-        872
+        130,
+        260
       ],
       [
-        472,
-        828
+        860,
+        220
       ],
       [
-        852,
-        874
+        940,
+        520
       ],
       [
-        934,
-        1010
-      ],
-      [
-        850,
-        1360
+        870,
+        1740
       ],
       [
         650,
-        1424
+        1880
       ],
       [
-        190,
-        1386
+        210,
+        1810
       ],
       [
-        86,
-        1284
+        84,
+        1480
       ],
       [
-        82,
-        984
+        88,
+        470
       ]
     ]
   },
   "blockers": [
     {
-      "id": "s3_rock_reef_east",
+      "id": "cave_wall_nw",
       "type": "ellipse",
-      "cx": 772,
-      "cy": 1182,
-      "rx": 82,
-      "ry": 42
+      "cx": 150,
+      "cy": 330,
+      "rx": 92,
+      "ry": 54
     },
     {
-      "id": "s3_crystal_w",
+      "id": "cave_wall_ne",
+      "type": "ellipse",
+      "cx": 884,
+      "cy": 360,
+      "rx": 92,
+      "ry": 54
+    },
+    {
+      "id": "rock_reef_east",
+      "type": "ellipse",
+      "cx": 790,
+      "cy": 1120,
+      "rx": 92,
+      "ry": 50
+    },
+    {
+      "id": "crystal_w",
       "type": "ellipse",
       "cx": 250,
-      "cy": 1162,
-      "rx": 30,
-      "ry": 20
+      "cy": 1140,
+      "rx": 48,
+      "ry": 30
     }
   ]
 }

@@ -2,124 +2,84 @@
   "map": "forest-cat-portrait",
   "size": {
     "width": 1024,
-    "height": 2216
+    "height": 1980
   },
-  "actor_radius": 18,
+  "actor_radius": 28,
   "walkmesh": {
     "type": "polygon",
     "points": [
       [
-        118,
-        829
+        126,
+        210
       ],
       [
-        895,
-        829
+        890,
+        190
       ],
       [
         940,
-        959
+        470
       ],
       [
-        885,
-        1400
+        896,
+        1780
       ],
       [
-        160,
-        1408
+        704,
+        1880
       ],
       [
-        86,
-        1274
+        220,
+        1830
       ],
       [
         84,
-        962
+        1530
+      ],
+      [
+        86,
+        420
       ]
     ]
   },
   "blockers": [
     {
-      "id": "tree_nw_01",
-      "type": "circle",
-      "cx": 120,
-      "cy": 854,
-      "r": 36
-    },
-    {
-      "id": "tree_ne_01",
-      "type": "circle",
-      "cx": 824,
-      "cy": 856,
-      "r": 36
-    },
-    {
-      "id": "tree_sw_01",
-      "type": "circle",
-      "cx": 150,
-      "cy": 1344,
-      "r": 38
-    },
-    {
-      "id": "tree_se_01",
-      "type": "circle",
-      "cx": 850,
-      "cy": 1328,
-      "r": 38
-    },
-    {
-      "id": "tree_n_02",
-      "type": "circle",
-      "cx": 454,
-      "cy": 808,
-      "r": 32
-    },
-    {
-      "id": "tree_s_02",
-      "type": "circle",
-      "cx": 520,
-      "cy": 1414,
-      "r": 34
-    },
-    {
-      "id": "bush_w_01",
+      "id": "cave_nw",
       "type": "ellipse",
-      "cx": 270,
-      "cy": 1004,
-      "rx": 38,
-      "ry": 22
+      "cx": 245,
+      "cy": 245,
+      "rx": 130,
+      "ry": 80
     },
     {
-      "id": "bush_e_01",
-      "type": "ellipse",
-      "cx": 744,
-      "cy": 1132,
-      "rx": 38,
-      "ry": 22
+      "id": "tree_w_mid",
+      "type": "circle",
+      "cx": 88,
+      "cy": 650,
+      "r": 62
     },
     {
-      "id": "rock_n_01",
-      "type": "ellipse",
-      "cx": 652,
-      "cy": 954,
-      "rx": 30,
-      "ry": 20
+      "id": "tree_e_mid",
+      "type": "circle",
+      "cx": 940,
+      "cy": 620,
+      "r": 62
     },
     {
-      "id": "rock_s_01",
+      "id": "rock_se",
       "type": "ellipse",
-      "cx": 384,
-      "cy": 1299,
-      "rx": 30,
-      "ry": 20
+      "cx": 822,
+      "cy": 1320,
+      "rx": 58,
+      "ry": 34
     },
     {
-      "id": "stump_01",
+      "id": "stump_sw",
       "type": "ellipse",
-      "cx": 678,
-      "cy": 1334,
-      "rx": 30,
-      "ry": 22
+      "cx": 260,
+      "cy": 1582,
+      "rx": 55,
+      "ry": 35
     }
   ]
 }

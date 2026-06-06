@@ -4,7 +4,7 @@
   "preview": "assets/map/forest-cat-stage3-portrait-layered-preview.png",
   "size": {
     "width": 1024,
-    "height": 2216
+    "height": 1980
   },
   "render_order": [
     "base",
@@ -12,60 +12,6 @@
     "y_sorted",
     "actors"
   ],
-  "props": {
-    "cave_crystal_cluster": "assets/props/cave_crystal_cluster.png",
-    "cave_fern": "assets/props/cave_fern.png",
-    "cave_hanging_vines": "assets/props/cave_hanging_vines.png",
-    "cave_rock_reef": "assets/props/cave_rock_reef.png"
-  },
-  "placements": [
-    {
-      "id": "s3_rock_reef_east",
-      "prop": "cave_rock_reef",
-      "x": 772,
-      "y": 1182,
-      "w": 330,
-      "layer": "y_sorted"
-    },
-    {
-      "id": "s3_crystal_w",
-      "prop": "cave_crystal_cluster",
-      "x": 250,
-      "y": 1162,
-      "w": 104,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_fern_mid",
-      "prop": "cave_fern",
-      "x": 492,
-      "y": 1000,
-      "w": 86,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_fern_sw",
-      "prop": "cave_fern",
-      "x": 324,
-      "y": 1342,
-      "w": 78,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_fern_ne",
-      "prop": "cave_fern",
-      "x": 706,
-      "y": 968,
-      "w": 72,
-      "layer": "ground_props"
-    },
-    {
-      "id": "s3_vines_opening",
-      "prop": "cave_hanging_vines",
-      "x": 410,
-      "y": 834,
-      "w": 190,
-      "layer": "y_sorted"
-    }
-  ]
+  "props": {},
+  "placements": []
 }

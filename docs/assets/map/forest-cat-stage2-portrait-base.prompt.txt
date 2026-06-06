@@ -1,1 +1,1 @@
-Portrait iPhone 13 runtime variant composed from the accepted layered raster stage. Canvas 1024x2216; original 1024x768 gameplay area is centered at y=724, with painterly terrain extended above and below for phone portrait display.
+Full newly generated portrait map for iPhone 13 play area. Canvas 1024x1980. new full portrait dense deep forest generated map. No mirrored extension, no repeated seams, no blur-only padding; UI header/footer are outside this play canvas.

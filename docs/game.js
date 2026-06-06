@@ -101,8 +101,10 @@ const TREE_FADE_ALPHA = 0.42;
 const ITEM_SHEET_COLUMNS = 3;
 const MAX_BURIED_ITEMS = 8;
 const DIG_SPOT_MIN_DISTANCE = 78;
+const CAT_DRAW_SIZE = 156;
+const FOUND_ITEM_DRAW_SIZE = 88;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "34";
+const ASSET_VERSION = "35";
 const portraitStageQuery = matchMedia("(max-width: 760px) and (orientation: portrait)");
 
 const stages = [
@@ -700,7 +702,7 @@ function setPathTo(target) {
 function finishDestination() {
   state.destination = null;
   state.path = [];
-  if (state.pendingDigSpot && Math.hypot(state.pendingDigSpot.x - state.cat.x, state.pendingDigSpot.y - state.cat.y) < 70) {
+  if (state.pendingDigSpot && Math.hypot(state.pendingDigSpot.x - state.cat.x, state.cat.y - state.pendingDigSpot.y) < 96) {
     digSpot(state.pendingDigSpot);
   }
 }
@@ -710,7 +712,7 @@ function setDestinationFromClientPoint(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
   const x = ((clientX - rect.left) / rect.width) * canvas.width;
   const y = ((clientY - rect.top) / rect.height) * canvas.height;
-  const spot = nearestDigSpot(x, y, 44);
+  const spot = nearestDigSpot(x, y, 78);
   if (spot) {
     state.pendingDigSpot = spot;
     setPathTo(nearestWalkablePoint(spot.x, spot.y + 18));
@@ -831,7 +833,7 @@ function playTrashDiscoverySound(audio, now) {
 
 function tryDig() {
   if (state.stageMenuOpen || state.digTimer > 0) return false;
-  const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 58);
+  const spot = nearestDigSpot(state.cat.x, state.cat.y - 8, 96);
   if (!spot) {
     setNotice("ここには何もなさそう");
     return false;
@@ -997,8 +999,8 @@ function drawCat() {
   const digFrame = digging ? Math.min(3, Math.floor((1 - state.digTimer / 0.7) * 4)) : state.cat.frame;
   const sx = (digFrame % 2) * frameSize;
   const sy = Math.floor(digFrame / 2) * frameSize;
-  const width = 78;
-  const height = 78;
+  const width = CAT_DRAW_SIZE;
+  const height = CAT_DRAW_SIZE;
   ctx.save();
   if (state.cat.facing < 0) {
     ctx.translate(state.cat.x, 0);
@@ -1022,26 +1024,26 @@ function drawDigSpot(spot) {
 
   ctx.fillStyle = "rgba(83, 55, 25, 0.7)";
   ctx.beginPath();
-  ctx.ellipse(0, 0, 22, 9, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, 32, 13, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "rgba(158, 118, 58, 0.72)";
   ctx.beginPath();
-  ctx.ellipse(-5, -3, 13, 5, -0.15, 0, Math.PI * 2);
+  ctx.ellipse(-7, -4, 19, 7, -0.15, 0, Math.PI * 2);
   ctx.fill();
 
   if (!spot.found) {
     ctx.strokeStyle = "rgba(255, 243, 170, 0.78)";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(-4, -16);
-    ctx.lineTo(-1, -9);
-    ctx.moveTo(4, -16);
-    ctx.lineTo(1, -9);
+    ctx.moveTo(-6, -23);
+    ctx.lineTo(-2, -13);
+    ctx.moveTo(6, -23);
+    ctx.lineTo(2, -13);
     ctx.stroke();
   }
   ctx.globalAlpha = 1;
   if (spot.found) {
-    drawCollectibleIcon(spot.item, -22, -48, 44);
+    drawCollectibleIcon(spot.item, -FOUND_ITEM_DRAW_SIZE / 2, -96, FOUND_ITEM_DRAW_SIZE);
   }
   ctx.restore();
 }

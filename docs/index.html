@@ -1080,7 +1080,8 @@
           width: 100vw;
           height: 100dvh;
           min-height: 560px;
-          padding: 0;
+          padding-top: calc(42px + env(safe-area-inset-top));
+          padding-bottom: calc(48px + env(safe-area-inset-bottom));
           background: #142415;
         }
 
@@ -1543,6 +1544,6 @@
       </div>
       <div class="status" id="status"></div>
     </main>
-    <script src="game.js?v=34"></script>
+    <script src="game.js?v=35"></script>
   </body>
 </html>

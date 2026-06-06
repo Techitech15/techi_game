@@ -2,42 +2,25 @@
   "map": "forest-cat-stage2-portrait",
   "player_spawn": {
     "id": "cat_spawn_stage2",
-    "x": 500,
-    "y": 1157,
+    "x": 512,
+    "y": 1050,
     "facing": "down"
   },
   "camera_bounds": {
     "x": 0,
     "y": 0,
     "width": 1024,
-    "height": 2216
+    "height": 1980
   },
-  "exits": [
-    {
-      "id": "south_trail",
-      "x": 440,
-      "y": 1428,
-      "w": 170,
-      "h": 56,
-      "to": "forest-cat"
-    },
-    {
-      "id": "north_glade",
-      "x": 452,
-      "y": 788,
-      "w": 156,
-      "h": 70,
-      "to": "locked-glade"
-    }
-  ],
+  "exits": [],
   "encounter_zones": [
     {
       "id": "deep_clearing",
+      "cx": 512,
+      "cy": 1050,
+      "rx": 320,
+      "ry": 520,
       "shape": "ellipse",
-      "cx": 510,
-      "cy": 1134,
-      "rx": 235,
-      "ry": 168,
       "encounters": []
     }
   ]

@@ -2,195 +2,82 @@
   "map": "forest-cat-stage2-portrait",
   "size": {
     "width": 1024,
-    "height": 2216
+    "height": 1980
   },
-  "actor_radius": 18,
+  "actor_radius": 28,
   "walkmesh": {
     "type": "polygon",
     "points": [
       [
-        122,
-        860
+        136,
+        235
       ],
       [
-        872,
-        852
+        870,
+        220
       ],
       [
-        926,
-        1016
+        930,
+        520
       ],
       [
-        858,
-        1384
+        884,
+        1740
       ],
       [
-        178,
-        1390
+        676,
+        1870
       ],
       [
-        102,
-        1244
+        224,
+        1815
       ],
       [
-        102,
-        962
+        92,
+        1500
+      ],
+      [
+        100,
+        430
       ]
     ]
   },
   "blockers": [
     {
-      "id": "s2_tree_nw_01",
+      "id": "dense_tree_nw",
       "type": "circle",
-      "cx": 72,
-      "cy": 842,
-      "r": 42
+      "cx": 112,
+      "cy": 290,
+      "r": 70
     },
     {
-      "id": "s2_tree_nw_02",
+      "id": "dense_tree_ne",
       "type": "circle",
-      "cx": 235,
-      "cy": 816,
-      "r": 34
+      "cx": 906,
+      "cy": 320,
+      "r": 72
     },
     {
-      "id": "s2_tree_n_01",
+      "id": "dense_tree_w",
       "type": "circle",
-      "cx": 430,
-      "cy": 812,
-      "r": 31
+      "cx": 96,
+      "cy": 980,
+      "r": 70
     },
     {
-      "id": "s2_tree_ne_01",
-      "type": "circle",
-      "cx": 802,
-      "cy": 836,
-      "r": 38
-    },
-    {
-      "id": "s2_tree_ne_02",
-      "type": "circle",
-      "cx": 955,
-      "cy": 904,
-      "r": 40
-    },
-    {
-      "id": "s2_tree_w_01",
-      "type": "circle",
-      "cx": 74,
-      "cy": 1108,
-      "r": 38
-    },
-    {
-      "id": "s2_tree_w_02",
-      "type": "circle",
-      "cx": 172,
-      "cy": 1264,
-      "r": 36
-    },
-    {
-      "id": "s2_tree_e_01",
+      "id": "dense_tree_e",
       "type": "circle",
       "cx": 930,
-      "cy": 1116,
-      "r": 40
+      "cy": 1050,
+      "r": 74
     },
     {
-      "id": "s2_tree_e_02",
-      "type": "circle",
-      "cx": 842,
-      "cy": 1292,
-      "r": 36
-    },
-    {
-      "id": "s2_tree_sw_01",
-      "type": "circle",
-      "cx": 235,
-      "cy": 1448,
-      "r": 40
-    },
-    {
-      "id": "s2_tree_s_01",
-      "type": "circle",
-      "cx": 520,
-      "cy": 1432,
-      "r": 38
-    },
-    {
-      "id": "s2_tree_se_01",
-      "type": "circle",
-      "cx": 744,
-      "cy": 1450,
-      "r": 40
-    },
-    {
-      "id": "s2_tree_mid_01",
-      "type": "circle",
-      "cx": 528,
-      "cy": 916,
-      "r": 34
-    },
-    {
-      "id": "s2_tree_mid_02",
-      "type": "circle",
-      "cx": 360,
-      "cy": 1039,
-      "r": 28
-    },
-    {
-      "id": "s2_tree_mid_03",
-      "type": "circle",
-      "cx": 675,
-      "cy": 1094,
-      "r": 27
-    },
-    {
-      "id": "s2_bush_01",
+      "id": "deep_rock",
       "type": "ellipse",
-      "cx": 292,
-      "cy": 972,
-      "rx": 40,
-      "ry": 23
-    },
-    {
-      "id": "s2_bush_02",
-      "type": "ellipse",
-      "cx": 646,
-      "cy": 1064,
-      "rx": 41,
-      "ry": 24
-    },
-    {
-      "id": "s2_bush_03",
-      "type": "ellipse",
-      "cx": 454,
-      "cy": 1179,
-      "rx": 36,
-      "ry": 21
-    },
-    {
-      "id": "s2_rock_01",
-      "type": "ellipse",
-      "cx": 420,
-      "cy": 1244,
-      "rx": 32,
-      "ry": 21
-    },
-    {
-      "id": "s2_rock_02",
-      "type": "ellipse",
-      "cx": 785,
-      "cy": 1252,
-      "rx": 31,
-      "ry": 20
-    },
-    {
-      "id": "s2_stump_01",
-      "type": "ellipse",
-      "cx": 312,
-      "cy": 1336,
-      "rx": 30,
-      "ry": 22
+      "cx": 470,
+      "cy": 1380,
+      "rx": 58,
+      "ry": 34
     }
   ]
 }

@@ -2,42 +2,25 @@
   "map": "forest-cat-stage3-portrait",
   "player_spawn": {
     "id": "cat_spawn_stage3",
-    "x": 490,
-    "y": 1154,
+    "x": 512,
+    "y": 1070,
     "facing": "down"
   },
   "camera_bounds": {
     "x": 0,
     "y": 0,
     "width": 1024,
-    "height": 2216
+    "height": 1980
   },
-  "exits": [
-    {
-      "id": "cave_mouth",
-      "x": 88,
-      "y": 1258,
-      "w": 120,
-      "h": 92,
-      "to": "forest-cat-stage2"
-    },
-    {
-      "id": "sunlit_depths",
-      "x": 828,
-      "y": 892,
-      "w": 116,
-      "h": 96,
-      "to": "deeper-cave"
-    }
-  ],
+  "exits": [],
   "encounter_zones": [
     {
       "id": "sunbeam_chamber",
-      "shape": "ellipse",
       "cx": 512,
-      "cy": 1116,
-      "rx": 255,
-      "ry": 185,
+      "cy": 1030,
+      "rx": 360,
+      "ry": 560,
+      "shape": "ellipse",
       "encounters": []
     }
   ]
