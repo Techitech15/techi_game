@@ -101,10 +101,12 @@ const TREE_FADE_ALPHA = 0.42;
 const ITEM_SHEET_COLUMNS = 3;
 const MAX_BURIED_ITEMS = 8;
 const DIG_SPOT_MIN_DISTANCE = 78;
-const CAT_DRAW_SIZE = 156;
-const FOUND_ITEM_DRAW_SIZE = 88;
+const CAT_DRAW_WIDTH = 138;
+const CAT_DRAW_HEIGHT = 156;
+const FOUND_ITEM_DRAW_WIDTH = 78;
+const FOUND_ITEM_DRAW_HEIGHT = 88;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "35";
+const ASSET_VERSION = "36";
 const portraitStageQuery = matchMedia("(max-width: 760px) and (orientation: portrait)");
 
 const stages = [
@@ -180,7 +182,7 @@ const state = {
   currentStage: null,
   layout: "landscape",
   playerLevel: 0,
-  cat: { x: 512, y: 405, speed: 125, facing: 1, frame: 0, frameTime: 0 },
+  cat: { x: 512, y: 405, speed: 165, facing: 1, frame: 0, frameTime: 0 },
   destination: null,
   path: [],
   pendingDigSpot: null,
@@ -999,8 +1001,8 @@ function drawCat() {
   const digFrame = digging ? Math.min(3, Math.floor((1 - state.digTimer / 0.7) * 4)) : state.cat.frame;
   const sx = (digFrame % 2) * frameSize;
   const sy = Math.floor(digFrame / 2) * frameSize;
-  const width = CAT_DRAW_SIZE;
-  const height = CAT_DRAW_SIZE;
+  const width = CAT_DRAW_WIDTH;
+  const height = CAT_DRAW_HEIGHT;
   ctx.save();
   if (state.cat.facing < 0) {
     ctx.translate(state.cat.x, 0);
@@ -1043,19 +1045,19 @@ function drawDigSpot(spot) {
   }
   ctx.globalAlpha = 1;
   if (spot.found) {
-    drawCollectibleIcon(spot.item, -FOUND_ITEM_DRAW_SIZE / 2, -96, FOUND_ITEM_DRAW_SIZE);
+    drawCollectibleIcon(spot.item, -FOUND_ITEM_DRAW_WIDTH / 2, -96, FOUND_ITEM_DRAW_WIDTH, FOUND_ITEM_DRAW_HEIGHT);
   }
   ctx.restore();
 }
 
-function drawCollectibleIcon(itemId, x, y, size) {
+function drawCollectibleIcon(itemId, x, y, width, height = width) {
   const image = state.images.get("items");
   const item = currentItemTypes()[itemId];
   if (!image || !item) return;
   const cellSize = image.width / ITEM_SHEET_COLUMNS;
   const sx = (item.sprite % ITEM_SHEET_COLUMNS) * cellSize;
   const sy = Math.floor(item.sprite / ITEM_SHEET_COLUMNS) * cellSize;
-  ctx.drawImage(image, sx, sy, cellSize, cellSize, x, y, size, size);
+  ctx.drawImage(image, sx, sy, cellSize, cellSize, x, y, width, height);
 }
 
 function drawNotice() {
