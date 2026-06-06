@@ -102,7 +102,7 @@ const ITEM_SHEET_COLUMNS = 3;
 const MAX_BURIED_ITEMS = 8;
 const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "31";
+const ASSET_VERSION = "32";
 
 const stages = [
   {
