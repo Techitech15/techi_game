@@ -1,0 +1,128 @@
+{
+  "map": "forest-cat-portrait",
+  "base": "assets/map/forest-cat-portrait-base.png",
+  "preview": "assets/map/forest-cat-portrait-layered-preview.png",
+  "size": {
+    "width": 1024,
+    "height": 2216
+  },
+  "render_order": [
+    "base",
+    "ground_props",
+    "y_sorted",
+    "actors"
+  ],
+  "props": {
+    "leafy_bush": "assets/props/leafy_bush.png",
+    "mossy_rock": "assets/props/mossy_rock.png",
+    "mushroom_fern": "assets/props/mushroom_fern.png",
+    "mossy_stump": "assets/props/mossy_stump.png",
+    "broadleaf_tree": "assets/props/broadleaf_tree.png"
+  },
+  "placements": [
+    {
+      "id": "tree_nw_01",
+      "prop": "broadleaf_tree",
+      "x": 120,
+      "y": 854,
+      "w": 220,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "tree_ne_01",
+      "prop": "broadleaf_tree",
+      "x": 824,
+      "y": 856,
+      "w": 220,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "tree_sw_01",
+      "prop": "broadleaf_tree",
+      "x": 150,
+      "y": 1344,
+      "w": 230,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "tree_se_01",
+      "prop": "broadleaf_tree",
+      "x": 850,
+      "y": 1328,
+      "w": 230,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "tree_n_02",
+      "prop": "broadleaf_tree",
+      "x": 454,
+      "y": 808,
+      "w": 190,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "tree_s_02",
+      "prop": "broadleaf_tree",
+      "x": 520,
+      "y": 1414,
+      "w": 205,
+      "layer": "y_sorted"
+    },
+    {
+      "id": "bush_w_01",
+      "prop": "leafy_bush",
+      "x": 270,
+      "y": 1004,
+      "w": 92,
+      "layer": "ground_props"
+    },
+    {
+      "id": "bush_e_01",
+      "prop": "leafy_bush",
+      "x": 744,
+      "y": 1132,
+      "w": 92,
+      "layer": "ground_props"
+    },
+    {
+      "id": "rock_n_01",
+      "prop": "mossy_rock",
+      "x": 652,
+      "y": 954,
+      "w": 76,
+      "layer": "ground_props"
+    },
+    {
+      "id": "rock_s_01",
+      "prop": "mossy_rock",
+      "x": 384,
+      "y": 1299,
+      "w": 78,
+      "layer": "ground_props"
+    },
+    {
+      "id": "stump_01",
+      "prop": "mossy_stump",
+      "x": 678,
+      "y": 1334,
+      "w": 88,
+      "layer": "ground_props"
+    },
+    {
+      "id": "mushrooms_01",
+      "prop": "mushroom_fern",
+      "x": 345,
+      "y": 894,
+      "w": 72,
+      "layer": "ground_props"
+    },
+    {
+      "id": "mushrooms_02",
+      "prop": "mushroom_fern",
+      "x": 805,
+      "y": 984,
+      "w": 66,
+      "layer": "ground_props"
+    }
+  ]
+}

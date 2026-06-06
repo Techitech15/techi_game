@@ -102,7 +102,8 @@ const ITEM_SHEET_COLUMNS = 3;
 const MAX_BURIED_ITEMS = 8;
 const DIG_SPOT_MIN_DISTANCE = 78;
 const MAX_LEVEL = 15;
-const ASSET_VERSION = "33";
+const ASSET_VERSION = "34";
+const portraitStageQuery = matchMedia("(max-width: 760px) and (orientation: portrait)");
 
 const stages = [
   {
@@ -112,11 +113,17 @@ const stages = [
     description: "Lv.0から",
     unlockLevel: 0,
     image: "assets/map/forest-cat-layered-preview.png",
+    portraitImage: "assets/map/forest-cat-portrait-layered-preview.png",
     itemSheet: "assets/items/collectibles-sheet.png",
     files: {
       props: "data/forest-cat-props.json",
       collision: "data/forest-cat-collision.json",
       hooks: "data/forest-cat-scene-hooks.json",
+    },
+    portraitFiles: {
+      props: "data/forest-cat-portrait-props.json",
+      collision: "data/forest-cat-portrait-collision.json",
+      hooks: "data/forest-cat-portrait-scene-hooks.json",
     },
   },
   {
@@ -126,11 +133,17 @@ const stages = [
     description: "Lv.6で解放",
     unlockLevel: 6,
     image: "assets/map/forest-cat-stage2-layered-preview.png",
+    portraitImage: "assets/map/forest-cat-stage2-portrait-layered-preview.png",
     itemSheet: "assets/items/stage2-collectibles-sheet.png",
     files: {
       props: "data/forest-cat-stage2-props.json",
       collision: "data/forest-cat-stage2-collision.json",
       hooks: "data/forest-cat-stage2-scene-hooks.json",
+    },
+    portraitFiles: {
+      props: "data/forest-cat-stage2-portrait-props.json",
+      collision: "data/forest-cat-stage2-portrait-collision.json",
+      hooks: "data/forest-cat-stage2-portrait-scene-hooks.json",
     },
   },
   {
@@ -140,11 +153,17 @@ const stages = [
     description: "Lv.11で解放",
     unlockLevel: 11,
     image: "assets/map/forest-cat-stage3-layered-preview.png",
+    portraitImage: "assets/map/forest-cat-stage3-portrait-layered-preview.png",
     itemSheet: "assets/items/stage3-collectibles-sheet.png",
     files: {
       props: "data/forest-cat-stage3-props.json",
       collision: "data/forest-cat-stage3-collision.json",
       hooks: "data/forest-cat-stage3-scene-hooks.json",
+    },
+    portraitFiles: {
+      props: "data/forest-cat-stage3-portrait-props.json",
+      collision: "data/forest-cat-stage3-portrait-collision.json",
+      hooks: "data/forest-cat-stage3-portrait-scene-hooks.json",
     },
   },
 ];
@@ -157,6 +176,7 @@ const state = {
   settingsOpen: false,
   debugMode: false,
   currentStage: null,
+  layout: "landscape",
   playerLevel: 0,
   cat: { x: 512, y: 405, speed: 125, facing: 1, frame: 0, frameTime: 0 },
   destination: null,
@@ -191,6 +211,28 @@ function loadImage(path) {
   });
 }
 
+function stageLayout() {
+  return portraitStageQuery.matches ? "portrait" : "landscape";
+}
+
+function stageFiles(stage, layout = stageLayout()) {
+  return layout === "portrait" && stage.portraitFiles ? stage.portraitFiles : stage.files;
+}
+
+function stageRecordKey(stage = state.currentStage, layout = state.layout) {
+  return `${stage?.id || "stage"}:${layout || "landscape"}`;
+}
+
+function stageMenuImage(stage) {
+  return stageLayout() === "portrait" && stage.portraitImage ? stage.portraitImage : stage.image;
+}
+
+function applyCanvasSize(size) {
+  if (!size) return;
+  if (canvas.width !== size.width) canvas.width = size.width;
+  if (canvas.height !== size.height) canvas.height = size.height;
+}
+
 async function boot() {
   state.images.set("cat", await loadImage("assets/cat/munchkin-walk-sheet.png"));
   state.images.set("catDig", await loadImage("assets/cat/munchkin-dig-sheet.png"));
@@ -202,6 +244,8 @@ async function boot() {
 async function loadStage(stageId) {
   const stage = stages.find((item) => item.id === stageId);
   if (!stage || state.loadingStage) return;
+  const layout = stageLayout();
+  const files = stageFiles(stage, layout);
   state.loadingStage = true;
   try {
     state.ready = false;
@@ -212,14 +256,16 @@ async function loadStage(stageId) {
     state.digCompleteSpot = null;
 
     const [props, collision, hooks] = await Promise.all([
-      fetch(asset(stage.files.props)).then((res) => res.json()),
-      fetch(asset(stage.files.collision)).then((res) => res.json()),
-      fetch(asset(stage.files.hooks)).then((res) => res.json()),
+      fetch(asset(files.props)).then((res) => res.json()),
+      fetch(asset(files.collision)).then((res) => res.json()),
+      fetch(asset(files.hooks)).then((res) => res.json()),
     ]);
 
     state.currentStage = stage;
+    state.layout = layout;
     state.collision = collision;
     state.hooks = hooks;
+    applyCanvasSize(props.size || collision.size);
     state.cat.x = hooks.player_spawn.x;
     state.cat.y = hooks.player_spawn.y;
     state.cat.facing = 1;
@@ -247,8 +293,9 @@ async function loadStage(stageId) {
 }
 
 function initDigSpots() {
-  if (state.stageRecords[state.currentStage.id]) {
-    state.digSpots = state.stageRecords[state.currentStage.id].digSpots;
+  const key = stageRecordKey();
+  if (state.stageRecords[key]) {
+    state.digSpots = state.stageRecords[key].digSpots;
     return;
   }
 
@@ -257,7 +304,7 @@ function initDigSpots() {
     const position = randomDigSpotPosition(state.digSpots);
     state.digSpots.push({ id: `${state.currentStage.id}_buried_${index}_${item}`, x: position.x, y: position.y, item, found: false });
   });
-  state.stageRecords[state.currentStage.id] = { digSpots: state.digSpots };
+  state.stageRecords[key] = { digSpots: state.digSpots };
 }
 
 function currentItemTypes() {
@@ -287,9 +334,10 @@ function shuffle(items) {
 }
 
 function randomDigSpotPosition(existingSpots) {
+  const bounds = walkmeshBounds(54);
   for (let attempt = 0; attempt < 900; attempt++) {
-    const x = 110 + Math.random() * 804;
-    const y = 145 + Math.random() * 490;
+    const x = bounds.left + Math.random() * (bounds.right - bounds.left);
+    const y = bounds.top + Math.random() * (bounds.bottom - bounds.top);
     if (!canMoveTo(x, y + 18)) continue;
     if (Math.hypot(x - state.cat.x, y - state.cat.y) < 100) continue;
     if (existingSpots.some((spot) => Math.hypot(x - spot.x, y - spot.y) < DIG_SPOT_MIN_DISTANCE)) continue;
@@ -316,7 +364,24 @@ function randomDigSpotPosition(existingSpots) {
     { x: 612, y: 420 },
     { x: 388, y: 430 },
   ];
-  return fallback[existingSpots.length % fallback.length];
+  const point = fallback[existingSpots.length % fallback.length];
+  return { x: point.x, y: point.y + (state.layout === "portrait" ? 724 : 0) };
+}
+
+function walkmeshBounds(inset = 0) {
+  const points = state.collision?.walkmesh?.points || [
+    [110, 145],
+    [914, 635],
+  ];
+  const xs = points.map((point) => point[0]);
+  const ys = points.map((point) => point[1]);
+  const size = state.collision?.size || { width: canvas.width, height: canvas.height };
+  return {
+    left: Math.max(0, Math.min(...xs) + inset),
+    right: Math.min(size.width, Math.max(...xs) - inset),
+    top: Math.max(0, Math.min(...ys) + inset),
+    bottom: Math.min(size.height, Math.max(...ys) - inset),
+  };
 }
 
 function updateHud() {
@@ -411,7 +476,7 @@ function renderStageMenu() {
           class="stage-card"
           type="button"
           data-stage-id="${stage.id}"
-          style="--stage-image: url('${asset(stage.image)}')"
+          style="--stage-image: url('${asset(stageMenuImage(stage))}')"
           ${unlocked ? "" : "disabled"}
           aria-label="${stage.number} ${stage.name}"
         >
@@ -1087,6 +1152,20 @@ if (compactMissionQuery.addEventListener) {
   compactMissionQuery.addEventListener("change", handleMissionMediaChange);
 } else {
   compactMissionQuery.addListener(handleMissionMediaChange);
+}
+
+async function handleStageLayoutChange() {
+  setMissionCollapsed(portraitStageQuery.matches);
+  renderStageMenu();
+  if (state.currentStage) {
+    await loadStage(state.currentStage.id);
+  }
+}
+
+if (portraitStageQuery.addEventListener) {
+  portraitStageQuery.addEventListener("change", handleStageLayoutChange);
+} else {
+  portraitStageQuery.addListener(handleStageLayoutChange);
 }
 
 hudElements.missionTitle.addEventListener("pointerdown", (event) => {

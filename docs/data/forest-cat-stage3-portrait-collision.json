@@ -1,0 +1,67 @@
+{
+  "map": "forest-cat-stage3-portrait",
+  "size": {
+    "width": 1024,
+    "height": 2216
+  },
+  "actor_radius": 18,
+  "walkmesh": {
+    "type": "polygon",
+    "points": [
+      [
+        118,
+        872
+      ],
+      [
+        472,
+        828
+      ],
+      [
+        852,
+        874
+      ],
+      [
+        934,
+        1010
+      ],
+      [
+        850,
+        1360
+      ],
+      [
+        650,
+        1424
+      ],
+      [
+        190,
+        1386
+      ],
+      [
+        86,
+        1284
+      ],
+      [
+        82,
+        984
+      ]
+    ]
+  },
+  "blockers": [
+    {
+      "id": "s3_rock_reef_east",
+      "type": "ellipse",
+      "cx": 772,
+      "cy": 1182,
+      "rx": 82,
+      "ry": 42
+    },
+    {
+      "id": "s3_crystal_w",
+      "type": "ellipse",
+      "cx": 250,
+      "cy": 1162,
+      "rx": 30,
+      "ry": 20
+    }
+  ]
+}
